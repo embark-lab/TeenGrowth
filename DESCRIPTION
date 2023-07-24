@@ -1,0 +1,11 @@
+Package: anthroforward
+Type: Package
+Title: Anthropometric Values Forecasted Forward Through Adolescent Development
+Version: 0.1.0
+Author: Katherine Schaumberg
+Maintainer: katherine.schaumberg@gmail.com
+Description: Forecasts BMI values and weights to age 20 based on 
+    anthropometric measurements in childhood (age 2+)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
