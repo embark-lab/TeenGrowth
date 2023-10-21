@@ -1,6 +1,3 @@
-solve_for_weight <- function(bmi, height){
-  w = (bmi*(height^2))/703
-}
 
 wt_lookup_by_age <- function (id, age_1, df) {
   df <- df |>
