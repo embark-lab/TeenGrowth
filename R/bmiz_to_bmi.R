@@ -147,3 +147,6 @@ bmiz_lookup <- function(bmi, sex = 2, age, data_source = 'cdc', age_unit = NULL,
     stop("Invalid data_source. Use 'cdc' or 'wgsr'.")
   }
 }
+
+
+

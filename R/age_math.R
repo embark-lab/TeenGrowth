@@ -16,9 +16,9 @@ age_unit <- function(age) {
     age_unit <- 'days'
   } else if (age > 52 * 5) {
     age_unit <- 'weeks'
-  } else if (age > 12 * 5) {
+  } else if (age > 12 * 3) {
     age_unit <- 'months'
-  } else if (age > 2) {
+  } else {
     age_unit <- 'years'
   }
   return(age_unit)
@@ -40,21 +40,22 @@ age_unit <- function(age) {
 #' age_in_days(120, "months")  # Returns the age in days
 #'
 #' @export
+
 age_in_days <- function(age, age_unit = NULL, dob = NULL, date_assessed = NULL) {
-  if (is.null(age_unit)) {
-    age_unit <- age_unit(age)
-  }
   if (!is.null(dob) & !is.null(date_assessed)) {
     age_unit <- 'dates'
+  } else if (is.null(age_unit)) {
+    age_unit <- age_unit(age)
   }
+
   if (age_unit == 'years') {
     age_in_days <- age * 365.25
   } else if (age_unit == 'months') {
     age_in_days <- age * 30.4375
-  } else if (age_unit == 'days') {
-    age_in_days <- age
   } else if (age_unit == 'weeks') {
     age_in_days <- age * 7
+  } else if (age_unit == 'days') {
+    age_in_days <- age
   } else if (age_unit == 'dates') {
     age_in_days <- as.numeric(difftime(date_assessed, dob, units = 'days'))
   }
@@ -72,7 +73,7 @@ age_in_days <- function(age, age_unit = NULL, dob = NULL, date_assessed = NULL) 
 #' age_in_months(730)  # Returns 24
 #'
 #' @export
-age_in_months <- function(age_days) {
-  age_in_months <- round(age_in_days(age_days) / 30.4375, 0)
+age_in_months <- function(age, age_unit = NULL, dob = NULL, date_assessed = NULL) {
+  age_in_months <- round(age_in_days(age = age, age_unit = age_unit, dob = dob, date_assessed = date_assessed) / 30.4375, 0)
   return(age_in_months)
 }

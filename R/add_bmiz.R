@@ -26,7 +26,7 @@ align_sex_coding <- function(sex) {
   } else if (all(sex %in% c(1, 2))) {
     coding <- "1(Male)/2(Female)"
   } else {
-    stop("Invalid coding. Please use 'Male/Female', 'M/F', '0/1', or '1/2'.")
+    stop("Invalid coding. Please use 'Male/Female', 'M/F', '0/1 [0=M, 1 = F]', or '1/2 [1 = M, 2 = F]'")
   }
   return(list(coding = coding, sex = sex))
 }
