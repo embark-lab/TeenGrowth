@@ -21,3 +21,9 @@ align_sex_coding <- function(sex) {
   }
   return(list(coding = coding, sex = sex))
 }
+
+# Define a function to align sex coding in a data frame
+align_sex_coding_in_df <- function(data, sex_column = 'sex') {
+  data <- data |> mutate("{sex_column}" := align_sex_coding(.data[[sex_column]])$sex)
+  return(data)
+}

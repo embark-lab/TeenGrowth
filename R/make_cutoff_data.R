@@ -1,4 +1,3 @@
-vectorized_bmi_lookup <- Vectorize(bmi_lookup, vectorize.args = c("age"))
 
 
 #' @title solve for weight
@@ -25,16 +24,17 @@ solve_for_weight <- function(bmi, height){
 #' @return bmi scores based on bmiz and age
 #' @export
 
-agemos <- c(36:240)
-
 cutoff_bmi_by_age_data <- function (age = agemos, data_source = 'cdc', sex = 2, adult_height = NA) {
+  vectorized_bmi_lookup <- Vectorize(bmi_lookup, vectorize.args = c("age"))
+  agemos <- c(36:240)
   tibble(agemos = age) %>%
     mutate(
       adult_height = adult_height,
       median_bmi = vectorized_bmi_lookup(data_point = 0, sex = sex, age = agemos, type = 'bmiz', data_source = data_source),
       UW_cutoff_bmi = vectorized_bmi_lookup(data_point = -1, sex = sex, age = agemos, type = 'bmiz', data_source = data_source),
       median_wt = if_else(age > 14*12 & !is.na(adult_height), solve_for_weight(median_bmi, adult_height), NaN),
-      AN_cutoff_wt = if_else(age > 14*12 & !is.na(adult_height), median_wt * 0.85, NaN)
+      AN_cutoff_wt = if_else(age > 14*12 & !is.na(adult_height), median_wt * 0.85, NaN),
+      sex = sex
     )
 }
 

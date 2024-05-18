@@ -4,7 +4,7 @@
 \alias{age_in_months}
 \title{Convert age in days to age in months (rounded).}
 \usage{
-age_in_months(age_days)
+age_in_months(age, age_unit = NULL, dob = NULL, date_assessed = NULL)
 }
 \arguments{
 \item{age_days}{Numeric value representing the age in days.}
