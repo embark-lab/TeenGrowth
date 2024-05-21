@@ -1,0 +1,34 @@
+---
+title: "TeenGrowth Vignette"
+author: "Katherine Schaumberg "
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+        fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{eBMIz Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Create bmi forecast
+
+```{r}
+library(TeenGrowth)
+library(tidyr)
+test_forecast <- 
+
+```
+
+## Plot bmi forecast
+```{r, warning=FALSE, message=FALSE}
+plot_eBMI(forcast_data = make_full_bmi_df(test_data_3, adult_height = 'adult_ht_in'), model = 'User Defined', id = 2)
+
+```

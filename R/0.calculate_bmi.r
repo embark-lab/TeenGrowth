@@ -46,6 +46,7 @@ weight_in_kg <- function(weight, weight_units = 'kg') {
 #' @param height Height value in either inches (in), meters (m), or feet (ft).
 #' @param height_unit Unit of height measurement ('in', 'm', or 'ft').
 #' @return Height value converted to centimeters (cm).
+#' @export
 height_in_cm <- function(height, height_unit = 'cm') {
   if (height_unit == 'in' | height_unit == 'inches' | height_unit == 'inch') {
     height <- height * 2.54  # Convert inches to centimeters
