@@ -23,23 +23,27 @@ m2y <- function(age_m){
 #' @export
 
 
-plot_eBMI <- function(raw_data, forcast_data, model, id) {
-  raw_data <- raw_data %>%
-    filter(participant == id)
-  forcast_data <- forecast_data %>%
-    filter(participant == id & .model == model)
-  data$age <- data$agemos/12
-  ggplot2::ggplot(data = data, mapping = aes(x = age, y = eBMI)) +
-  #  geom_point(mapping = aes(agemos, bmi_real), data = bmi_data_bypx[[i]], stat = 'identity', position = 'identity') +
-# #    stat_smooth(mapping = aes(x = agemos, y = bmi_real), method = lm, formula = y~x + poly(x,2) + poly(x,3), linetype = 'dotted', col = 'blue', data = bmi_data_bypx[[i]], se = FALSE) +
-#     stat_smooth(mapping = aes(x = agemos, y = bmi_upper), col = 'purple', linetype = 'dashed', data = fcast_bypx[[i]],  position = 'identity' ) +
-#     stat_smooth(mapping = aes(x = agemos, y = bmi_lower), col = 'purple', linetype = 'dashed', data = fcast_bypx[[i]],  position = 'identity' ) +
-#     stat_smooth(mapping = aes (x = agemos, y = bmi), data = fcast_bypx[[i]]) +
+plot_eBMI <- function(clean_data,
+                      forecast_data,
+                      model,
+                      ci,
+                      px) {
+  data_1 <- clean_data %>%
+    filter(id == px)
+  data_2 <- forecast_data %>%
+    filter(id == px & .model == model & interval_type == ci)
+  data_2$age <- data_2$agemos/12
+  ggplot2::ggplot(data = data_2, mapping = aes(x = age, y = eBMI)) +
+  geom_point(mapping = aes(agemos, bmi), data = data_1, stat = 'identity', position = 'identity') +
+    stat_smooth(mapping = aes(x = agemos, y = bmi), method = lm, formula = y~x + poly(x,2) + poly(x,3), linetype = 'dotted', col = 'blue', data = data_1, se = FALSE) +
+    stat_smooth(mapping = aes(x = agemos, y = upper_eBMI), col = 'purple', linetype = 'dashed', data = data_2,  position = 'identity' ) + stat_smooth(mapping = aes(x = agemos, y = lower_eBMI), col = 'purple', linetype = 'dashed', data = data_2,  position = 'identity' ) +
+     stat_smooth(mapping = aes (x = agemos, y =eBMI), data = data_2) +
     scale_x_continuous(breaks = 12*0:240, label = m2y(12*0:240)) +
-    stat_smooth(mapping = aes(x = agemos, y = median_bmi), col = 'orange', linetype = 'dotted', stat = 'identity', position = 'identity')+
-    stat_smooth(mapping = aes(x = agemos, y = UW_cutoff_bmi), col = 'red', linetype = 'dotted', stat = 'identity', position = 'identity' )+
-    ylim(c(14, 27))+
-    xlab('Age') +
-    ylab('BMI') +
+stat_smooth(mapping = aes(x = agemos, y = median_bmi), data = data_2, col = 'orange', linetype = 'dotted', position = 'identity')+
+ stat_smooth(mapping = aes(x = agemos, y = UW_cutoff_bmi), data = data_2, col = 'red', linetype = 'dotted', position = 'identity' )+
+ xlab('Age') +
+ylab('BMI') +
+    coord_cartesian(ylim = c(12, 30)) +
     embarktools::embark_theme_a
 }
+

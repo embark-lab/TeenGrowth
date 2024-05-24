@@ -14,7 +14,7 @@ make_full_bmi_df(
 )
 }
 \arguments{
-\item{data}{A data frame containing BMI data.}
+\item{data}{A cleaned data frame containing BMI data.}
 
 \item{id}{Column name for IDs (default: 'id').}
 

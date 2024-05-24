@@ -6,12 +6,6 @@
 \usage{
 make_bmiz_forecast(
   data,
-  age = age,
-  bmiz = bmiz,
-  id = NULL,
-  dob = NULL,
-  date_assessed = NULL,
-  age_unit = NULL,
   lower_margin = lower_margin,
   upper_margin = upper_margin,
   central_value = central_value

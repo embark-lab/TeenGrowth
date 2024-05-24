@@ -4,16 +4,10 @@
 \alias{cull_demos}
 \title{Cull Demographics Data}
 \usage{
-cull_demos(data, id = NULL, sex = NULL, adult_height = NULL)
+cull_demos(data)
 }
 \arguments{
-\item{data}{A data frame containing demographic information.}
-
-\item{sex}{(Optional) Column name for sex.}
-
-\item{adult_height}{(Optional) Column name for adult height.}
-
-\item{participant}{(Optional) Column name for participant IDs.}
+\item{cleaned_data}{A cleaned data frame containing demographic information.}
 }
 \value{
 A data frame with aligned demographics data.

@@ -2,40 +2,14 @@
 #'
 #' Align participant, sex coding, and add adult height and sex columns, if available.
 #'
-#' @param data A data frame containing demographic information.
-#' @param participant (Optional) Column name for participant IDs.
-#' @param sex (Optional) Column name for sex.
-#' @param adult_height (Optional) Column name for adult height.
+#' @param cleaned_data A cleaned data frame containing demographic information.
 #' @return A data frame with aligned demographics data.
 #' @export
 #'
-cull_demos <- function(data, id = NULL, sex = NULL, adult_height = NULL) {
-  if (!missing(id) && id %in% names(data)) {
-    data <- data |> mutate(id = .data[[id]])
-  } else if ('id' %in% names(data)) {
-    data$id <- data$id
-  } else {
-    data <- data |> mutate(id = 1)
-  }
-
-  if (!missing(sex) && sex %in% names(data)) {
-    data <- data |> mutate(sex = .data[[sex]])
-  } else if ('sex' %in% names(data)) {
-    data <- data
-  } else {
-    data <- data |> mutate(sex = 2)
-  }
-
-  if (!missing(adult_height) && adult_height %in% names(data)) {
-    data <- data |> mutate(adult_height = .data[[adult_height]])
-  } else {
-    data <- data |> mutate(adult_height = NA)
-  }
-
-  df1_demos <- align_sex_coding_in_df(data = data, sex_column = 'sex') |>
+cull_demos <- function(data) {
+  df1_demos <- data |>
     select(id, sex, adult_height) |>
     unique()
-
   return(df1_demos)
 }
 
@@ -82,7 +56,10 @@ hilo_to_char <- function(hilo_obj) {
 #' @import dplyr
 #' @return A processed data frame with formatted intervals.
 #' @export
-process_bmiz_forecast <- function(df, lower_margin = lower_margin, upper_margin = upper_margin, central_value = central_value) {
+process_bmiz_forecast <- function(df,
+                                  lower_margin = lower_margin,
+                                  upper_margin = upper_margin,
+                                  central_value = central_value) {
   User_Model <- paste0('(-', lower_margin,', ',central_value, ', ',upper_margin,')')
   df <- df %>%
     mutate(
@@ -178,7 +155,7 @@ add_eBMI_to_df <- function(data, adult_height = adult_height) {
 #'
 #' Create a full BMI data frame by processing forecasts, generating cutoffs, and adding eBMI values.
 #'
-#' @param data A data frame containing BMI data.
+#' @param data A cleaned data frame containing BMI data.
 #' @param id Column name for IDs (default: 'id').
 #' @param adult_height Column name for adult height (default: 'adult_height').
 #' @import tidyr
@@ -186,19 +163,74 @@ add_eBMI_to_df <- function(data, adult_height = adult_height) {
 #' @return A full BMI data frame with processed forecasts and cutoffs.
 #' @export
 #'
-make_full_bmi_df <- function(data, id = 'id', adult_height = 'adult_height',
-                             lower_margin = 0.5, upper_margin = 0.5, central_value = 'mean') {
-  df_long <- process_bmiz_forecast(make_bmiz_forecast(data,
-                                                      id = id,
+make_full_bmi_df <- function(data,
+                             id = 'id',
+                             adult_height = 'adult_height',
+                             lower_margin = 0.5,
+                             upper_margin = 0.5,
+                             central_value = 'mean') {
+  df_long <- process_bmiz_forecast(make_bmiz_forecast(data = data,
                                                       lower_margin = lower_margin,
                                                       upper_margin = upper_margin,
                                                       central_value = central_value),
                                                       lower_margin = lower_margin,
                                                       upper_margin = upper_margin,
                                                       central_value = central_value)
-  cutoff_data <- cutoffs_by_participant(cull_demos(data, adult_height = adult_height))
-  full_df <- merge(cutoff_data, df_long, by = c('id', 'agemos'))
-  full_df <- add_eBMI_to_df(full_df, adult_height = adult_height)
+  cutoff_data <- cutoffs_by_participant(cull_demos(data))
+  full_df <- full_join(cutoff_data, df_long, by = c('id', 'agemos'))
+  full_df <- add_eBMI_to_df(data = full_df, adult_height = adult_height)
 
+  return(full_df)
+}
+
+# clean and return the full BMI data frame
+#' Clean and Process Data
+#'
+#' @param data A data frame containing BMI data.
+#' @return A full BMI data frame with processed forecasts and cutoffs.
+#' @export
+#' @import dplyr
+#' @import tidyr
+#'
+
+clean_and_process <- function(data,
+                              id_col_name = NULL,
+                              age_col_name = NULL,
+                              dob_col_name = NULL,
+                              date_assessed_col_name = NULL,
+                              age_unit = NULL,
+                              sex_col_name = NULL,
+                              ht_col_name = NULL,
+                              ht_unit = 'cm',
+                              wt_col_name = NULL,
+                              wt_unit = 'kg',
+                              bmi_col_name = NULL,
+                              bmiz_col_name = NULL,
+                              pct_col_name = NULL,
+                              data_source = 'cdc',
+                              adult_height_col_name = NULL,
+                              lower_margin = 0.5,
+                              upper_margin = 0.5,
+                              central_value = 'mean') {
+  clean_data <- clean_data(data,
+                           id_col_name = id_col_name,
+                           age_col_name = age_col_name,
+                           dob_col_name = dob_col_name,
+                           date_assessed_col_name = date_assessed_col_name,
+                           age_unit = age_unit,
+                           sex_col_name = sex_col_name,
+                           ht_col_name = ht_col_name,
+                           ht_unit = ht_unit,
+                           wt_col_name = wt_col_name,
+                           wt_unit = wt_unit,
+                           bmi_col_name = bmi_col_name,
+                           bmiz_col_name = bmiz_col_name,
+                           pct_col_name = pct_col_name,
+                           data_source = data_source,
+                           adult_height_col_name = adult_height_col_name)
+  full_df <- make_full_bmi_df(clean_data,
+                              lower_margin = lower_margin,
+                              upper_margin = upper_margin,
+                              central_value = central_value)
   return(full_df)
 }

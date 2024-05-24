@@ -95,10 +95,14 @@ if (!is.null(adult_height_col_name)) {
     )) %>%
     fill(adult_height, .direction = "down") %>%
     ungroup()
+  message("Adult height was not provided -- Adult height has been set to the oldest height obtained after age 14 for girls and after age 16 for boys.")
+
 }
 else {
   # make the adult height column = NA
   data$adult_height <- NA_real_
+  message("Neither height nor an adult height column were provided. Adult height has been set to NA.")
+
 }
 # make the adult height column in cm if it is not already
 # if the adult height column exists -- make it in cm

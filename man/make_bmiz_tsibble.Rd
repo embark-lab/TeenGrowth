@@ -4,24 +4,10 @@
 \alias{make_bmiz_tsibble}
 \title{Create tsibble for BMIz Data}
 \usage{
-make_bmiz_tsibble(
-  data,
-  age = age,
-  bmiz = bmiz,
-  id = NULL,
-  dob = NULL,
-  date_assessed = NULL,
-  age_unit = NULL
-)
+make_bmiz_tsibble(data)
 }
 \arguments{
-\item{data}{A data frame containing the input data.}
-
-\item{age}{Column name for age in the data frame.}
-
-\item{bmiz}{Column name for BMIz in the data frame.}
-
-\item{id}{Column name for id identifier.}
+\item{cleaned_data}{A data frame containing the input data - cleaned per clean_data function}
 
 \item{dob}{Column name for date of birth (optional).}
 
