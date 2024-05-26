@@ -6,6 +6,8 @@
 \usage{
 make_bmiz_forecast(
   data,
+  model = model,
+  ci = 95,
   lower_margin = lower_margin,
   upper_margin = upper_margin,
   central_value = central_value

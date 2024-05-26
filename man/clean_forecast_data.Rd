@@ -4,7 +4,7 @@
 \alias{clean_forecast_data}
 \title{Clean Forecast Data}
 \usage{
-clean_forecast_data(data, px, model = "ARIMA_mean", ci = "95\%")
+clean_forecast_data(data, px, model)
 }
 \arguments{
 \item{data}{A data frame containing forecast data.}

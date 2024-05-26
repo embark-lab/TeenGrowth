@@ -10,6 +10,7 @@ cull_demos <- function(data) {
   df1_demos <- data |>
     select(id, sex, adult_height) |>
     unique()
+  # make sex a double
   return(df1_demos)
 }
 
@@ -47,37 +48,63 @@ hilo_to_char <- function(hilo_obj) {
   upper <- hilo_obj$upper
   paste0("[", lower, ", ", upper, "]")
 }
+# Function to convert hilo objects to character strings
+hilo_to_char <- function(hilo_obj) {
+  lower <- hilo_obj$lower
+  upper <- hilo_obj$upper
+  paste0("[", lower, ", ", upper, "]")
+}
+
 #' Process BMIZ Forecast Data Frame
 #'
-#' Convert `hilo` objects to character strings, pivot longer, and format intervals.
+#' Convert `hilo` objects to character strings and format intervals.
 #'
 #' @param df A BMIZ forecast data frame.
+#' @param model The model type used for forecasting.
+#' @param ci The confidence interval level.
+#' @param lower_margin The lower margin for the user-defined forecast.
+#' @param upper_margin The upper margin for the user-defined forecast.
+#' @param central_value The central value for the user-defined forecast.
 #' @import tidyr
 #' @import dplyr
 #' @return A processed data frame with formatted intervals.
 #' @export
 process_bmiz_forecast <- function(df,
-                                  lower_margin = lower_margin,
-                                  upper_margin = upper_margin,
-                                  central_value = central_value) {
-  User_Model <- paste0('(-', lower_margin,', ',central_value, ', ',upper_margin,')')
+                                  model,
+                                  ci,
+                                  lower_margin = NULL,
+                                  upper_margin = NULL,
+                                  central_value = NULL) {
+  # Define the user model interval column name if applicable
+  if (!is.null(lower_margin) && !is.null(upper_margin) && !is.null(central_value)) {
+    User_Model <- paste0('(-', lower_margin, ', ', central_value, ', ', upper_margin, ')')
+  }
+
+  # Convert `hilo` objects to character strings for the specified confidence interval
+  if (model != "User Defined") {
+    ci_col <- paste0(ci, "%")
+    df <- df %>%
+      mutate(!!ci_col := sapply(.data[[ci_col]], hilo_to_char))
+  } else {
+    df <- df %>%
+      mutate(!!User_Model := paste0("[", lower_margin, ", ", upper_margin, "]"))
+  }
+
+  # Determine the existing column based on the model and ci
+  existing_col <- if (model == "User Defined") {
+    User_Model
+  } else {
+    paste0(ci, "%")
+  }
+
+  # Add interval_type column
   df <- df %>%
-    mutate(
-      `95%` = sapply(`95%`, hilo_to_char),
-      `99%` = sapply(`99%`, hilo_to_char)
-    )
+    mutate(interval_type = existing_col)
 
-  df_long <- df %>%
-    tidyr::pivot_longer(
-      cols = c(`95%`, `99%`, !!User_Model),
-      names_to = "interval_type",
-      values_to = "range"
-    ) %>%
-    filter(range != "[NA, NA]")
-
-  df_long <- df_long %>%
+  # Separate the interval into lower and upper
+  df <- df %>%
     tidyr::separate(
-      col = range,
+      col = !!sym(existing_col),
       into = c("lower", "upper"),
       sep = ", ",
       remove = TRUE
@@ -85,13 +112,12 @@ process_bmiz_forecast <- function(df,
     mutate(
       lower_eBMIz = as.numeric(sub("\\[", "", lower)),
       upper_eBMIz = as.numeric(sub("\\]", "", upper))
-    ) |>
-    rename(eBMIz = .mean) |>
+    ) %>%
+    rename(eBMIz = .mean) %>%
     select(-c(lower, upper))
 
-  return(df_long)
+  return(df)
 }
-
 
 #' Apply BMI Lookup
 #'
@@ -104,7 +130,11 @@ process_bmiz_forecast <- function(df,
 #' @param type Type of BMI data (default: 'bmiz').
 #' @return A vector of BMI values.
 #' @export
-apply_bmi_lookup <- function(data, data_point_col, age_col = agemos, data_source = 'cdc', type = 'bmiz') {
+apply_bmi_lookup <- function(data, data_point_col,
+                             age_col = agemos,
+                             data_source =
+                             'cdc',
+                             type = 'bmiz') {
   data_point_col <- enquo(data_point_col)
   age_col <- enquo(age_col)
 
@@ -116,7 +146,8 @@ apply_bmi_lookup <- function(data, data_point_col, age_col = agemos, data_source
         type = type,
         data_source = data_source,
         sex = sex,
-        age = !!age_col
+        age = !!age_col,
+        age_unit = "months"
       )
     ) %>%
     pull(bmi_value)
@@ -133,7 +164,8 @@ apply_bmi_lookup <- function(data, data_point_col, age_col = agemos, data_source
 #' @param adult_height Column name for adult height.
 #' @return A data frame with added eBMI and weight columns.
 #' @export
-add_eBMI_to_df <- function(data, adult_height = adult_height) {
+add_eBMI_to_df <- function(data,
+                           adult_height = adult_height) {
   data <- data |>
     mutate(eBMI = apply_bmi_lookup(data, data_point_col = eBMIz),
            lower_eBMI = apply_bmi_lookup(data, data_point_col = lower_eBMIz),
@@ -156,44 +188,79 @@ add_eBMI_to_df <- function(data, adult_height = adult_height) {
 #' Create a full BMI data frame by processing forecasts, generating cutoffs, and adding eBMI values.
 #'
 #' @param data A cleaned data frame containing BMI data.
+#' @param model The model type used for forecasting.
+#' @param ci The confidence interval level.
 #' @param id Column name for IDs (default: 'id').
 #' @param adult_height Column name for adult height (default: 'adult_height').
+#' @param lower_margin The lower margin for the user-defined forecast.
+#' @param upper_margin The upper margin for the user-defined forecast.
+#' @param central_value The central value for the user-defined forecast.
 #' @import tidyr
 #' @import dplyr
 #' @return A full BMI data frame with processed forecasts and cutoffs.
 #' @export
-#'
 make_full_bmi_df <- function(data,
-                             id = 'id',
+                             model,
+                             ci,
                              adult_height = 'adult_height',
+                             id = 'id',
                              lower_margin = 0.5,
                              upper_margin = 0.5,
                              central_value = 'mean') {
   df_long <- process_bmiz_forecast(make_bmiz_forecast(data = data,
+                                                      model = model,
+                                                      ci = ci,
                                                       lower_margin = lower_margin,
                                                       upper_margin = upper_margin,
                                                       central_value = central_value),
-                                                      lower_margin = lower_margin,
-                                                      upper_margin = upper_margin,
-                                                      central_value = central_value)
+                                   model = model,
+                                   ci = ci,
+                                   lower_margin = lower_margin,
+                                   upper_margin = upper_margin,
+                                   central_value = central_value)
+  demos_data <- cull_demos(data)
+  full_df_long <- full_join(demos_data, df_long, by = 'id')
   cutoff_data <- cutoffs_by_participant(cull_demos(data))
-  full_df <- full_join(cutoff_data, df_long, by = c('id', 'agemos'))
+  full_df <- full_join(cutoff_data, full_df_long, by = c('id',
+                                                         'agemos',
+                                                         'sex',
+                                                         'adult_height'))
   full_df <- add_eBMI_to_df(data = full_df, adult_height = adult_height)
 
   return(full_df)
 }
 
-# clean and return the full BMI data frame
+
 #' Clean and Process Data
 #'
 #' @param data A data frame containing BMI data.
+#' @param model The model type used for forecasting.
+#' @param ci The confidence interval level.
+#' @param id_col_name Column name for IDs (default: NULL).
+#' @param age_col_name Column name for age (default: NULL).
+#' @param dob_col_name Column name for date of birth (default: NULL).
+#' @param date_assessed_col_name Column name for date assessed (default: NULL).
+#' @param age_unit Unit for age (default: NULL).
+#' @param sex_col_name Column name for sex (default: NULL).
+#' @param ht_col_name Column name for height (default: NULL).
+#' @param ht_unit Unit for height (default: 'cm').
+#' @param wt_col_name Column name for weight (default: NULL).
+#' @param wt_unit Unit for weight (default: 'kg').
+#' @param bmi_col_name Column name for BMI (default: NULL).
+#' @param bmiz_col_name Column name for BMI z-score (default: NULL).
+#' @param pct_col_name Column name for BMI percentile (default: NULL).
+#' @param data_source Data source for BMI lookup (default: 'cdc').
+#' @param adult_height_col_name Column name for adult height (default: NULL).
+#' @param lower_margin The lower margin for the user-defined forecast.
+#' @param upper_margin The upper margin for the user-defined forecast.
+#' @param central_value The central value for the user-defined forecast.
 #' @return A full BMI data frame with processed forecasts and cutoffs.
 #' @export
 #' @import dplyr
 #' @import tidyr
-#'
-
 clean_and_process <- function(data,
+                              model = 'Mean',
+                              ci = 95,
                               id_col_name = NULL,
                               age_col_name = NULL,
                               dob_col_name = NULL,
@@ -229,6 +296,8 @@ clean_and_process <- function(data,
                            data_source = data_source,
                            adult_height_col_name = adult_height_col_name)
   full_df <- make_full_bmi_df(clean_data,
+                              model = model,
+                              ci = ci,
                               lower_margin = lower_margin,
                               upper_margin = upper_margin,
                               central_value = central_value)

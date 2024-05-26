@@ -6,17 +6,29 @@
 \usage{
 process_bmiz_forecast(
   df,
-  lower_margin = lower_margin,
-  upper_margin = upper_margin,
-  central_value = central_value
+  model,
+  ci,
+  lower_margin = NULL,
+  upper_margin = NULL,
+  central_value = NULL
 )
 }
 \arguments{
 \item{df}{A BMIZ forecast data frame.}
+
+\item{model}{The model type used for forecasting.}
+
+\item{ci}{The confidence interval level.}
+
+\item{lower_margin}{The lower margin for the user-defined forecast.}
+
+\item{upper_margin}{The upper margin for the user-defined forecast.}
+
+\item{central_value}{The central value for the user-defined forecast.}
 }
 \value{
 A processed data frame with formatted intervals.
 }
 \description{
-Convert \code{hilo} objects to character strings, pivot longer, and format intervals.
+Convert \code{hilo} objects to character strings and format intervals.
 }

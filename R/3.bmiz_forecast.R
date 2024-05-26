@@ -49,7 +49,7 @@ user_defined_forecast <- function(data,
   }
 
   forecast <- tibble(
-    agemos = seq(max(data$agemos, na.rm = TRUE) + 1, max(data$agemos, na.rm = TRUE) + 60),
+    agemos = seq(max(data$agemos, na.rm = TRUE) + 1, max(data$agemos, na.rm = TRUE) + 120),
     .mean = central_bmiz,
     .lower = central_bmiz - lower_margin,
     .upper = central_bmiz + upper_margin,
@@ -77,10 +77,11 @@ user_defined_forecast <- function(data,
 #' @export
 
 fit_and_forecast_bmiz <- function(ts_data,
-                                  model = model,
-                                  lower_margin = lower_margin,
-                                  upper_margin = upper_margin,
-                                  central_value = central_value) {
+                                  model,
+                                  ci = 95,
+                                  lower_margin = NULL,
+                                  upper_margin = NULL,
+                                  central_value = NULL) {
   # Define the user model if needed
   if (!is.null(lower_margin) && !is.null(upper_margin) && !is.null(central_value)) {
     User_Model <- paste0('(-', lower_margin, ', ', central_value, ', ', upper_margin, ')')
@@ -90,18 +91,18 @@ fit_and_forecast_bmiz <- function(ts_data,
   if (model == "Mean") {
     bmiz_fit <- ts_data %>%
       model(Mean = MEAN(bmiz)) %>%
-      forecast(h = 60) %>%
-      hilo(level = c(95,99)) %>%
+      forecast(h = 120) %>%
+      hilo(level = ci) %>%
       as_tibble() %>%
-      select(id, .model, agemos, .mean, `95%`, `99%`) %>%
+      select(id, .model, agemos, .mean, !!as.symbol(paste0(ci, "%"))) %>%
       mutate(agemos = as.integer(agemos))
   } else if (model == "ARIMA") {
     bmiz_fit <- ts_data %>%
       model(ARIMA = ARIMA(bmiz ~ pdq(0,1,0))) %>%
-      forecast(h = 60) %>%
-      hilo(level = c(95,99)) %>%
+      forecast(h = 120) %>%
+      hilo(level = ci) %>%
       as_tibble() %>%
-      select(id, .model, agemos, .mean, `95%`, `99%`) %>%
+      select(id, .model, agemos, .mean, !!as.symbol(paste0(ci, "%"))) %>%
       mutate(agemos = as.integer(agemos))
   } else if (model == "ARIMA_mean") {
     bmiz_fit <- ts_data %>%
@@ -110,10 +111,10 @@ fit_and_forecast_bmiz <- function(ts_data,
         ARIMA = ARIMA(bmiz ~ pdq(0,1,0))
       ) %>%
       mutate(ARIMA_mean = (ARIMA + Mean) / 2) %>%
-      forecast(h = 60) %>%
-      hilo(level = c(95,99)) %>%
+      forecast(h = 120) %>%
+      hilo(level = ci) %>%
       as_tibble() %>%
-      select(id, .model, agemos, .mean, `95%`, `99%`) %>%
+      select(id, .model, agemos, .mean, !!as.symbol(paste0(ci, "%"))) %>%
       mutate(agemos = as.integer(agemos)) %>%
       filter(.model == "ARIMA_mean")
   } else if (model == "User Defined") {
@@ -131,6 +132,7 @@ fit_and_forecast_bmiz <- function(ts_data,
   return(bmiz_fit)
 }
 
+
 #' Create and Forecast BMIz Data
 #'
 #' @param data A data frame containing the input data.
@@ -144,12 +146,16 @@ fit_and_forecast_bmiz <- function(ts_data,
 #' @export
 
 make_bmiz_forecast <- function(data,
+                               model = model,
+                               ci = 95,
                                lower_margin = lower_margin,
                                upper_margin = upper_margin,
                                central_value = central_value)
   {
   ts_data <- make_bmiz_tsibble(data)
   bmiz_fit <- fit_and_forecast_bmiz(ts_data,
+                                    model = model,
+                                    ci = ci,
                                     lower_margin = lower_margin,
                                     upper_margin = upper_margin,
                                     central_value = central_value)

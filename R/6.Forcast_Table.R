@@ -17,10 +17,9 @@
 #' @export
 clean_forecast_data <- function(data,
                                 px,
-                                model = 'ARIMA_mean',
-                                ci = '95%') {
+                                model) {
   data <-  data %>%
-    filter(id == px & .model == model & interval_type == ci) %>%
+    filter(id == px & .model == model) %>%
     # only use ages that are divisible by 6
     filter(agemos %% 6 == 0) %>%
     # make an age column that is the age in years

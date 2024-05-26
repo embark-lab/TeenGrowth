@@ -4,7 +4,7 @@
 \alias{plot_eBMI}
 \title{plot_eBMI}
 \usage{
-plot_eBMI(clean_data, forecast_data, model, ci, px)
+plot_eBMI(clean_data, forecast_data, px)
 }
 \arguments{
 \item{data}{'data'}

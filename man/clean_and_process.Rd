@@ -6,6 +6,8 @@
 \usage{
 clean_and_process(
   data,
+  model = "Mean",
+  ci = 95,
   id_col_name = NULL,
   age_col_name = NULL,
   dob_col_name = NULL,
@@ -28,6 +30,46 @@ clean_and_process(
 }
 \arguments{
 \item{data}{A data frame containing BMI data.}
+
+\item{model}{The model type used for forecasting.}
+
+\item{ci}{The confidence interval level.}
+
+\item{id_col_name}{Column name for IDs (default: NULL).}
+
+\item{age_col_name}{Column name for age (default: NULL).}
+
+\item{dob_col_name}{Column name for date of birth (default: NULL).}
+
+\item{date_assessed_col_name}{Column name for date assessed (default: NULL).}
+
+\item{age_unit}{Unit for age (default: NULL).}
+
+\item{sex_col_name}{Column name for sex (default: NULL).}
+
+\item{ht_col_name}{Column name for height (default: NULL).}
+
+\item{ht_unit}{Unit for height (default: 'cm').}
+
+\item{wt_col_name}{Column name for weight (default: NULL).}
+
+\item{wt_unit}{Unit for weight (default: 'kg').}
+
+\item{bmi_col_name}{Column name for BMI (default: NULL).}
+
+\item{bmiz_col_name}{Column name for BMI z-score (default: NULL).}
+
+\item{pct_col_name}{Column name for BMI percentile (default: NULL).}
+
+\item{data_source}{Data source for BMI lookup (default: 'cdc').}
+
+\item{adult_height_col_name}{Column name for adult height (default: NULL).}
+
+\item{lower_margin}{The lower margin for the user-defined forecast.}
+
+\item{upper_margin}{The upper margin for the user-defined forecast.}
+
+\item{central_value}{The central value for the user-defined forecast.}
 }
 \value{
 A full BMI data frame with processed forecasts and cutoffs.

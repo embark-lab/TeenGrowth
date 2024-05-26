@@ -6,13 +6,23 @@
 \usage{
 fit_and_forecast_bmiz(
   ts_data,
-  lower_margin = lower_margin,
-  upper_margin = upper_margin,
-  central_value = central_value
+  model,
+  ci = 95,
+  lower_margin = NULL,
+  upper_margin = NULL,
+  central_value = NULL
 )
 }
 \arguments{
 \item{ts_data}{A tsibble containing the BMIz data.}
+
+\item{model}{Model to use for the forecast.}
+
+\item{lower_margin}{Lower margin for the forecast.}
+
+\item{upper_margin}{Upper margin for the forecast.}
+
+\item{central_value}{Central value for the forecast.}
 }
 \value{
 A forecast object for each id.
