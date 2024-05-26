@@ -102,29 +102,38 @@ ylab('Body Mass Index') +
 #' @return A ggplot object displaying the weight forecast.
 #' @import ggplot2
 #' @import dplyr
+#' @import ggpubr
 #' @export
 #' @examples
 #' # Assuming forecast_data is your dataframe and embarktools is loaded
 #' # plot_weight(forecast_data, "ARIMA", "95%", 1, a_height = 65)
-plot_weight <- function(clean_data,
-                        forecast_data,
-                        px,
-                        a_height = NULL) {
+library(ggplot2)
+library(ggpubr)
+library(dplyr)
+
+plot_weight <- function(clean_data, forecast_data, px, a_height = NULL) {
+  # Ensure data does not contain non-finite values
+  forecast_data <- forecast_data %>% filter(is.finite(eWeight) & is.finite(upper_eWeight) & is.finite(lower_eWeight) & is.finite(AN_cutoff_wt))
+  clean_data <- clean_data %>% filter(is.finite(weight))
+
   # Filter the data based on input parameters
   data <- forecast_data %>%
     filter(id == px & agemos >= 14 * 12)
+
   # Assign adult height if it is NA
   if (!is.null(a_height)) {
     data <- data %>%
       mutate(adult_height = ifelse(is.na(adult_height), a_height, adult_height))
   }
+
   # Calculate any weights after age 14 for girls and 16 for boys using the BMI and adult height from the clean data
   clean_data <- clean_data %>%
     filter(id == px & agemos >= 14 * 12)
-    if (!is.null(a_height)) {
-      clean_data <- clean_data %>%
-        mutate(adult_height = ifelse(is.na(adult_height), a_height, adult_height))
-    }
+
+  if (!is.null(a_height)) {
+    clean_data <- clean_data %>%
+      mutate(adult_height = ifelse(is.na(adult_height), a_height, adult_height))
+  }
 
   # Calculate weights using BMI and adult height
   data <- data %>%
@@ -134,63 +143,69 @@ plot_weight <- function(clean_data,
       lower_eWeight = lower_eBMI * (adult_height^2) / 703,
       AN_cutoff_wt = UW_cutoff_bmi * (adult_height^2) / 703
     )
-  data$age = data$agemos / 12
+  data$age <- data$agemos / 12
 
-  # same for clean data
-  clean_data <- clean_data |>
+  # Same for clean data
+  clean_data <- clean_data %>%
     mutate(weight = bmi * (adult_height^2) / 703)
-  clean_data$age = clean_data$agemos / 12
+  clean_data$age <- clean_data$agemos / 12
 
   # Plot the data
-  ggplot2::ggplot(data = data, mapping = aes(x = age, y = eWeight)) +
+  p <- ggplot2::ggplot(data = data, mapping = aes(x = age, y = eWeight)) +
     stat_smooth(mapping = aes(y = upper_eWeight), col = embarktools::embark_colors[4], linetype = 'dashed') +
     stat_smooth(mapping = aes(y = lower_eWeight), col = embarktools::embark_colors[4], linetype = 'dashed') +
     stat_smooth(mapping = aes(y = eWeight), col = embarktools::embark_colors[3]) +
-    # add points but only every 6 months
     geom_point(data = data %>% filter(agemos %% 6 == 0),
                aes(x = age, y = eWeight),
                size = 3,
                col = embarktools::embark_colors[1],
                fill = embarktools::embark_colors[3],
                shape = 21) +
-    # add points for the clean data
     geom_point(data = clean_data,
                aes(x = age, y = weight),
                size = 3,
-               col = embarktools::embark_colors[2],
-               fill = embarktools::embark_colors[2],
+               col = embarktools::embark_colors[1],
+               fill = embarktools::embark_colors[3],
                shape = 21) +
     scale_x_continuous(breaks = seq(14, max(data$age), by = 1),
                        labels = seq(14, max(data$age), by = 1)) +
-    stat_smooth(mapping = aes(y = AN_cutoff_wt), col = embarktools::embark_colors[2], linetype = 'dotted') +
-    # add geom_ribbon to shade the confidence interval
     geom_ribbon(mapping = aes(ymin = lower_eWeight, ymax = upper_eWeight), fill = embarktools::embark_colors[4], alpha = 0.3) +
-    # title
-    ggtitle(paste("Weight Prediction")) +
+    ggtitle("Weight Prediction") +
     xlab('Age (years)') +
     ylab('Weight (lbs)') +
- #   coord_cartesian(ylim = c(min(data$lower_eWeight, na.rm = TRUE), max(data$upper_eWeight, na.rm = TRUE))) +
     embarktools::embark_theme_a +
-    # add in some grid lines
-    theme(panel.grid.major = element_line(colour = "grey", linetype = "dotted")) +
-    scale_color_manual(
-      values = c(
-        "Upper eWeight" = embarktools::embark_colors[4],
-        "Lower eWeight" = embarktools::embark_colors[4],
-        "eWeight" = embarktools::embark_colors[3],
-        "Forecasted Data" = embarktools::embark_colors[1],
-        "Actual Data" = embarktools::embark_colors[2],
-        "AN Cutoff Weight" = embarktools::embark_colors[2]
-      ),
-      name = "Legend"
-    ) +
-    scale_fill_manual(
-      values = c("Confidence Interval" = embarktools::embark_colors[4]),
-      name = "Legend"
-    ) +
-    theme(legend.position = "bottom")
+    theme(panel.grid.major = element_line(colour = "grey", linetype = "dotted"),
+          legend.position = "none") # Remove the default legend
+
+  # Create the legend plot
+  legend_data <- data.frame(
+    label = factor(c("Prediction Window", "Pre-ED Wt / Expected Wt", "Wt post ED onset"),
+                   levels = c("Prediction Window", "Pre-ED Wt / Expected Wt", "Wt post ED onset"))
+  )
+
+  # Define the colors for the legend
+  colors <- c(
+    "Prediction Window" = "#A481C7",  # Lavender
+    "Pre-ED Wt / Expected Wt" = "#C2B824",              # Chartreuse
+    "Wt post ED onset" = "#EF6C45"  # Coral
+  )
+
+  legend_plot <- ggplot(legend_data, aes(x = label, y = 1, fill = label)) +
+    geom_bar(stat = "identity") +
+    scale_fill_manual(values = colors) +
+    theme_void() +
+    embarktools::embark_theme_a +
+    theme(legend.position = "bottom",
+          legend.title = element_blank()) +
+    guides(fill = guide_legend("Legend"))
+
+  # Extract the legend
+  legend <- ggpubr::get_legend(legend_plot)
+
+  # Combine the plot and legend using ggpubr
+  final_plot <- ggpubr::ggarrange(p, legend, ncol = 1, heights = c(10, 1))
+
+  return(final_plot)
 }
 
-# Example Usage:
-# Assuming forecast_data is your dataframe and embarktools is loaded
-# plot_weight(forecast_data, "ARIMA", "95%", 1, a_height = 65)
+
