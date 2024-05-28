@@ -26,7 +26,8 @@ Imports:
     fabletools,
     purrr,
     embarktools, 
-    ggpubr
+    ggpubr,
+    zscorer
 Suggests:
     knitr,
     rmarkdown,
