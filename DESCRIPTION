@@ -25,6 +25,7 @@ Imports:
     fable,
     fabletools,
     purrr,
+    embarktools
 Suggests:
     knitr,
     rmarkdown,
