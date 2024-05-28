@@ -19,6 +19,7 @@ m2y <- function(age_m){
 #' @import dplyr
 #' @import ggplot2
 #' @import embarktools
+#' @import ggpubr
 #' @return plot
 #' @export
 
