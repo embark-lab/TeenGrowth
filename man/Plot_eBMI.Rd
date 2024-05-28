@@ -15,7 +15,7 @@ plot_eBMI(clean_data, forecast_data, px, ed_aoo = NA)
 
 \item{age}{'age in months'}
 
-\item{adult_height}{'adult height in cm'}
+\item{adult_height_in}{'adult height in in'}
 }
 \value{
 plot

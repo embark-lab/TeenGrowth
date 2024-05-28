@@ -4,7 +4,7 @@
 \alias{add_eBMI_to_df}
 \title{Add eBMI to Data Frame}
 \usage{
-add_eBMI_to_df(data, adult_height = adult_height)
+add_eBMI_to_df(data, adult_height = adult_height_in)
 }
 \arguments{
 \item{data}{A data frame containing BMI data.}

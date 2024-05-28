@@ -13,6 +13,19 @@ solve_for_weight <- function(bmi, height){
   return(w)
 }
 
+#' @title solve for weight
+#' @description Using BMI and height, solve for weight
+#' @param bmi 'bmi'
+#' @param height 'height in cm'
+#' @import dplyr
+#' @return weight
+#' @export
+
+solve_for_weight_metric <- function(bmi, height){
+  w = bmi*(height^2)
+  return(w)
+}
+
 
 #' @title Cutoff BMI
 #' @description Makes Cutoff BMIs
@@ -29,7 +42,7 @@ cutoff_bmi_by_age_data <- function (age = agemos, data_source = 'cdc', sex = 2, 
   agemos <- c(36:240)
   tibble(agemos = age) %>%
     mutate(
-      adult_height = adult_height,
+      adult_height_in = adult_height,
       median_bmi = vectorized_bmi_lookup(data_point = 0, sex = sex, age = agemos, type = 'bmiz', data_source = data_source),
       UW_cutoff_bmi = vectorized_bmi_lookup(data_point = -1, sex = sex, age = agemos, type = 'bmiz', data_source = data_source),
       median_wt = if_else(age > 14*12 & !is.na(adult_height), solve_for_weight(median_bmi, adult_height), NaN),

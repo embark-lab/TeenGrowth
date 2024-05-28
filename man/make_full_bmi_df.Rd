@@ -8,7 +8,7 @@ make_full_bmi_df(
   data,
   model,
   ci,
-  adult_height = "adult_height",
+  adult_height = "adult_height_in",
   id = "id",
   lower_margin = 0.5,
   upper_margin = 0.5,

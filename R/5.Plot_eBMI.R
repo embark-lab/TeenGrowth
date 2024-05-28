@@ -15,7 +15,7 @@ m2y <- function(age_m){
 #' @param agemos 'age column'
 #' @param sex '1 = Male, 2 = Female'
 #' @param age 'age in months'
-#' @param adult_height 'adult height in cm'
+#' @param adult_height_in 'adult height in in'
 #' @import dplyr
 #' @import ggplot2
 #' @import embarktools
@@ -198,7 +198,7 @@ plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = N
   # Assign adult height if it is NA
   if (!is.null(a_height)) {
     clean_data <- clean_data %>%
-      mutate(adult_height = ifelse(is.na(adult_height), a_height, adult_height))
+      mutate(adult_height_in = ifelse(is.na(adult_height_in), a_height, adult_height_in))
   }
 
   # Make ed_aoo a column in the data if it is provided
@@ -212,7 +212,7 @@ plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = N
 
   # Same for clean data
   clean_data <- clean_data %>%
-    mutate(weight = bmi * (adult_height^2) / 703,
+    mutate(weight = bmi * (adult_height_in^2) / 703,
            age = agemos / 12) %>%
   filter(is.finite(weight) & id == px)
 
@@ -231,10 +231,10 @@ plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = N
   # Calculate weights using BMI and adult height
   data <- data %>%
     mutate(
-      eWeight = eBMI * (adult_height^2) / 703,
-      upper_eWeight = upper_eBMI * (adult_height^2) / 703,
-      lower_eWeight = lower_eBMI * (adult_height^2) / 703,
-      AN_cutoff_wt = UW_cutoff_bmi * (adult_height^2) / 703
+      eWeight = eBMI * (adult_height_in^2) / 703,
+      upper_eWeight = upper_eBMI * (adult_height_in^2) / 703,
+      lower_eWeight = lower_eBMI * (adult_height_in^2) / 703,
+      AN_cutoff_wt = UW_cutoff_bmi * (adult_height_in^2) / 703
     )
   data$age <- data$agemos / 12
 

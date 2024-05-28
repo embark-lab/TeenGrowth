@@ -67,6 +67,8 @@ clean_data <- function(data,
   # Convert age column to months
   data <- data %>%
     mutate(agemos = vectorized_age_in_months(!!sym(age_col_name), age_unit = age_unit))
+  # make an age column that is in years
+  data$age_years <- data$agemos / 12
 
 # create sex column and align
 # if sex column is null - assign all sex to female and make a note of this
@@ -101,21 +103,40 @@ if (!is.null(adult_height_col_name)) {
 }
 else {
   # make the adult height column = NA
-  data$adult_height <- NA_real_
+  data$adult_height_cm <- NA_real_
+  data$adult_height_in <- NA_real_
   message("Neither height nor an adult height column were provided. Adult height has been set to NA.")
-
 }
 # make the adult height column in cm if it is not already
 # if the adult height column exists -- make it in cm
-data$adult_height <- height_in_cm(data$adult_height, ht_unit)
+data$adult_height_cm <- height_in_cm(data$adult_height, ht_unit)
+# make an adult height in inches column for show - convert adult height to inches
+data$adult_height_in <- data$adult_height_cm / 2.54
 
 # manage the height and weight columns, if they exist -- make sure they are in cm and kg
 # Handle height and weight columns
 if (!is.null(ht_col_name)) {
-  data$height <- height_in_cm(data[[ht_col_name]], ht_unit)
+  data$height_cm <- height_in_cm(data[[ht_col_name]], ht_unit)
+  data$height_in <- data$height_cm / 2.54
 }
+
+# if ht_col_name doesn't exist, make height_cm = NA and height_in = NA
+if (is.null(ht_col_name)) {
+  data$height_cm <- NA_real_
+  data$height_in <- NA_real_
+  message("Height column was not provided. Height has been set to NA.")
+}
+
 if (!is.null(wt_col_name)) {
-  data$weight <- weight_in_kg(data[[wt_col_name]], wt_unit)
+  data$weight_kg <- weight_in_kg(data[[wt_col_name]], wt_unit)
+  data$weight_lb <- data$weight_kg / 0.45359237
+}
+
+# if wt_col_name doesn't exist, make weight_kg = NA and weight_lb = NA
+if (is.null(wt_col_name)) {
+  data$weight_kg <- NA_real_
+  data$weight_lb <- NA_real_
+  message("Weight column was not provided. Weight has been set to NA.")
 }
 
 # if bmi column is provided, use this column and rename it 'bmi' -- if it is not provided, calculate bmi from height and weight columns
@@ -123,7 +144,10 @@ if (!is.null(wt_col_name)) {
 if (!is.null(bmi_col_name)) {
   data$bmi <- data[[bmi_col_name]]
 } else if (!is.null(ht_col_name) & !is.null(wt_col_name)) {
-  data$bmi <- calculate_bmi(data$weight, data$height)
+  data$bmi <- calculate_bmi(weight = data$weight_kg,
+                            weight_unit = 'kg',
+                            height = data$height_cm,
+                            height_unit = 'cm')
 }
 # if bmiz column is provided and data$bmi still doesn't exist -- use this column to with age and sex to back out to bmi values
   else if (!is.null(bmiz_col_name)) {
@@ -161,7 +185,19 @@ data <- data %>%
   message("No eating disorder age of onset column was provided. Eating disorder age of onset has been set to NA -- can add this information later for plotting individuals")
 }
 # put all columns in the right order as noted at the top
-data <- data %>% select (id, agemos, sex, adult_height, bmi, bmiz, ed_aoo)
+data <- data %>% select (id,
+                         sex,
+                         age_years,
+                         agemos,
+                         height_in,
+                         height_cm,
+                         weight_lb,
+                         weight_kg,
+                         adult_height_in,
+                         adult_height_cm,
+                         bmi,
+                         bmiz,
+                         ed_aoo)
 return(data)
 }
 

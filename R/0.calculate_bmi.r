@@ -7,31 +7,27 @@
 #' @return BMI calculated based on the provided weight and height.
 #' @export
 
-calculate_bmi <- function(weight, weight_unit = 'kg', height, height_unit = 'cm') {
+calculate_bmi <- function(weight,
+                          weight_unit = 'kg',
+                          height,
+                          height_unit = 'cm') {
   if (weight_unit == 'kg' & height_unit == 'cm'){
     bmi <- weight / ((height / 100)^2)
   } else if (weight_unit == 'kg' & height_unit == 'm'){
     bmi <- weight / (height^2)
-  } else if (weight_unit == 'lbs' & height_unit == 'in'){
-    bmi <- (weight / (height^2)) * 703
-  } else if (weight_unit == 'lbs' & height_unit == 'cm'){
-    bmi <- (weight / ((height / 100)^2)) * 703
-  } else if (weight_unit == 'lbs' & height_unit == 'm'){
-    bmi <- (weight / (height^2)) * 703
-  } else if (weight_unit == 'kg' & height_unit == 'in'){
-    bmi <- (weight / (height^2)) * 703
-  } else if (weight_unit == 'lbs' & height_unit == 'm'){
-    bmi <- (weight / (height^2)) * 703
-  } else if (weight_unit == 'kg' & height_unit == 'in'){
+  } else if (weight_unit == 'lb' & height_unit == 'in'){
     bmi <- (weight / (height^2)) * 703
   }
+
   return(bmi)
 }
 
 #' Function that converts weight from pounds (lb) to kilograms (kg).
 #' @param weight Weight value in pounds (lb) or kilograms (kg) (default).
 #' @return Weight value converted to kilograms (kg).
-weight_in_kg <- function(weight, weight_units = 'kg') {
+#' @export
+weight_in_kg <- function(weight,
+                         weight_units = 'kg') {
   if (weight_units == 'lbs'| weight_units == 'lb'| weight_units == 'pounds') {
     weight <- weight * 0.45359237  # Convert pounds to kilograms
   }
@@ -48,7 +44,7 @@ weight_in_kg <- function(weight, weight_units = 'kg') {
 #' @return Height value converted to centimeters (cm).
 #' @export
 height_in_cm <- function(height, height_unit = 'cm') {
-  if (height_unit == 'in' | height_unit == 'inches' | height_unit == 'inch') {
+  if (height_unit == 'in' | height_unit == 'inches' | height_unit == 'inch' ) {
     height <- height * 2.54  # Convert inches to centimeters
   } else if (height_unit == 'm'| height_unit == 'meter' | height_unit == 'meters') {
     height <- height * 100   # Convert meters to centimeters

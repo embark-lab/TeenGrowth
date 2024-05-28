@@ -8,7 +8,7 @@
 #'
 cull_demos <- function(data) {
   df1_demos <- data |>
-    select(id, sex, adult_height) |>
+    select(id, sex, adult_height_in) |>
     unique()
   # make sex a double
   return(df1_demos)
@@ -27,9 +27,10 @@ cutoffs_by_participant <- function(data) {
   for (i in 1:nrow(data)) {
     id <- data$id[i]
     sex <- data$sex[i]
-    adult_height <- data$adult_height[i]
+    adult_height_in <- data$adult_height_in[i]
 
-    cutoff_data <- cutoff_bmi_by_age_data(sex = sex, adult_height = adult_height)
+    cutoff_data <- cutoff_bmi_by_age_data(sex = sex,
+                                          adult_height = adult_height_in)
     cutoff_data <- cutoff_data %>%
       mutate(id = id)
 
@@ -165,14 +166,17 @@ apply_bmi_lookup <- function(data, data_point_col,
 #' @return A data frame with added eBMI and weight columns.
 #' @export
 add_eBMI_to_df <- function(data,
-                           adult_height = adult_height) {
+                           adult_height = adult_height_in) {
   data <- data |>
     mutate(eBMI = apply_bmi_lookup(data, data_point_col = eBMIz),
            lower_eBMI = apply_bmi_lookup(data, data_point_col = lower_eBMIz),
            upper_eBMI = apply_bmi_lookup(data, data_point_col = upper_eBMIz)) |>
-    mutate(eWeight = solve_for_weight(bmi = eBMI, height = adult_height),
-           lower_eWeight = solve_for_weight(bmi = lower_eBMI, height = adult_height),
-           upper_eWeight = solve_for_weight(bmi = upper_eBMI, height = adult_height)) |>
+    mutate(eWeight = solve_for_weight(bmi = eBMI,
+                                      height = adult_height_in),
+           lower_eWeight = solve_for_weight(bmi = lower_eBMI,
+                                            height = adult_height_in),
+           upper_eWeight = solve_for_weight(bmi = upper_eBMI,
+                                            height = adult_height_in)) |>
     # make eWeight, lower_eWeight, and upper_eWeight NA for agemos < 14*12
     mutate(eWeight = ifelse(agemos < 14*12, NA, eWeight),
            lower_eWeight = ifelse(agemos < 14*12, NA, lower_eWeight),
@@ -202,7 +206,7 @@ add_eBMI_to_df <- function(data,
 make_full_bmi_df <- function(data,
                              model,
                              ci,
-                             adult_height = 'adult_height',
+                             adult_height = 'adult_height_in',
                              id = 'id',
                              lower_margin = 0.5,
                              upper_margin = 0.5,
@@ -229,7 +233,7 @@ make_full_bmi_df <- function(data,
   full_df <- full_join(cutoff_data, full_df_long, by = c('id',
                                                          'agemos',
                                                          'sex',
-                                                         'adult_height'))
+                                                         'adult_height_in'))
   full_df <- add_eBMI_to_df(data = full_df, adult_height = adult_height)
 
   return(full_df)
