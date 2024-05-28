@@ -49,7 +49,8 @@ clean_data <- function(data,
                            bmiz_col_name = NULL,
                            pct_col_name = NULL,
                            data_source = 'cdc',
-                           adult_height_col_name = NULL) {
+                           adult_height_col_name = NULL,
+                           ed_aoo_col_name = NULL) {
 # if id column is NULL, create a new id column and make the ID = 1
   if (is.null(id_col_name)) {
     data$id <- 1
@@ -151,8 +152,16 @@ if (!is.null(bmi_col_name)) {
   data$bmiz <- vectorized_bmiz_lookup(bmi = data$bmi, age = data$agemos, sex = data$sex, data_source = data_source)
   }
 
+# convert ed_aao to months if ed_aao_col_name is provided
+if (!is.null(ed_aoo_col_name)) {
+data <- data %>%
+  mutate(ed_aoo = vectorized_age_in_months(!!sym(ed_aoo_col_name), age_unit = age_unit))
+} else {
+  data$ed_aoo <- NA_real_
+  message("No eating disorder age of onset column was provided. Eating disorder age of onset has been set to NA -- can add this information later for plotting individuals")
+}
 # put all columns in the right order as noted at the top
-data <- data %>% select (id, agemos, sex, adult_height, bmi, bmiz)
+data <- data %>% select (id, agemos, sex, adult_height, bmi, bmiz, ed_aoo)
 return(data)
 }
 

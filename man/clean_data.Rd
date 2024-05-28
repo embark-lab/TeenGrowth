@@ -21,7 +21,8 @@ clean_data(
   bmiz_col_name = NULL,
   pct_col_name = NULL,
   data_source = "cdc",
-  adult_height_col_name = NULL
+  adult_height_col_name = NULL,
+  ed_aoo_col_name = NULL
 )
 }
 \arguments{

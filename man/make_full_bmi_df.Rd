@@ -8,8 +8,8 @@ make_full_bmi_df(
   data,
   model,
   ci,
-  id = "id",
   adult_height = "adult_height",
+  id = "id",
   lower_margin = 0.5,
   upper_margin = 0.5,
   central_value = "mean"
@@ -22,9 +22,9 @@ make_full_bmi_df(
 
 \item{ci}{The confidence interval level.}
 
-\item{id}{Column name for IDs (default: 'id').}
-
 \item{adult_height}{Column name for adult height (default: 'adult_height').}
+
+\item{id}{Column name for IDs (default: 'id').}
 
 \item{lower_margin}{The lower margin for the user-defined forecast.}
 

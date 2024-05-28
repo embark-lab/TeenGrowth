@@ -207,6 +207,11 @@ make_full_bmi_df <- function(data,
                              lower_margin = 0.5,
                              upper_margin = 0.5,
                              central_value = 'mean') {
+  # filter out data with ed_aoo < agemos if ed_aoo is not all NA
+  if (!all(is.na(data$ed_aoo))) {
+    data <- data |>
+      filter(agemos <= ed_aoo)
+  }
   df_long <- process_bmiz_forecast(make_bmiz_forecast(data = data,
                                                       model = model,
                                                       ci = ci,
@@ -278,7 +283,8 @@ clean_and_process <- function(data,
                               adult_height_col_name = NULL,
                               lower_margin = 0.5,
                               upper_margin = 0.5,
-                              central_value = 'mean') {
+                              central_value = 'mean',
+                              ed_aoo_col_name = NULL) {
   clean_data <- clean_data(data,
                            id_col_name = id_col_name,
                            age_col_name = age_col_name,
@@ -294,7 +300,8 @@ clean_and_process <- function(data,
                            bmiz_col_name = bmiz_col_name,
                            pct_col_name = pct_col_name,
                            data_source = data_source,
-                           adult_height_col_name = adult_height_col_name)
+                           adult_height_col_name = adult_height_col_name,
+                           ed_aoo_col_name = ed_aoo_col_name)
   full_df <- make_full_bmi_df(clean_data,
                               model = model,
                               ci = ci,

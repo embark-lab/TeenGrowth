@@ -4,7 +4,7 @@
 \alias{plot_weight}
 \title{Plot Weight Forecast}
 \usage{
-plot_weight(forecast_data, px, a_height = NULL)
+plot_weight(clean_data, forecast_data, px, ed_aoo = NA, a_height = NULL)
 }
 \arguments{
 \item{forecast_data}{A data frame containing the forecast data.}

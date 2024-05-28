@@ -25,7 +25,8 @@ clean_and_process(
   adult_height_col_name = NULL,
   lower_margin = 0.5,
   upper_margin = 0.5,
-  central_value = "mean"
+  central_value = "mean",
+  ed_aoo_col_name = NULL
 )
 }
 \arguments{
