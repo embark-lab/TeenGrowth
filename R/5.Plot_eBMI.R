@@ -68,7 +68,7 @@ plot_eBMI <- function(clean_data,
                stat = 'identity', position = 'identity',
                col = embarktools::embark_colors[1],
                fill = embarktools::embark_colors[3],
-               size = 3,
+               size = 4,
                shape = 21) +
    # if the post_ed data is not empty, plot the post_ed data
     stat_smooth(mapping = aes(x = agemos, y = bmi), method = lm, formula = y~x + poly(x,2),
@@ -115,7 +115,7 @@ plot_eBMI <- function(clean_data,
                stat = 'identity', position = 'identity',
                col = embarktools::embark_colors[1],
                fill = embarktools::embark_colors[2],
-               size = 3,
+               size = 4,
                shape = 21) }
 
   # Create the legend plot
@@ -250,19 +250,19 @@ plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = N
     stat_smooth(mapping = aes(y = eWeight), col = embarktools::embark_colors[3]) +
     geom_point(data = data %>% filter(agemos %% 6 == 0),
                aes(x = age, y = eWeight),
-               size = 3,
+               size = 4,
                col = embarktools::embark_colors[1],
                fill = embarktools::embark_colors[3],
                shape = 21) +
     geom_point(data = pre_ed,
                aes(x = age, y = weight),
-               size = 3,
+               size = 4,
                col = embarktools::embark_colors[1],
                fill = embarktools::embark_colors[3],
                shape = 21) +
     geom_point(data = post_ed,
                aes(x = age, y = weight),
-               size = 3,
+               size = 4,
                col = embarktools::embark_colors[1],
                fill = embarktools::embark_colors[2],
                shape = 21) +
