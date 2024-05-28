@@ -100,7 +100,9 @@ plot_eBMI <- function(clean_data,
     # Add graph title
     ggtitle("Expected BMI across Age") +
     # add in some grid lines
-    theme(panel.grid.major = element_line(colour = "grey", linetype = "dotted"))
+    theme(panel.grid.major = element_line(colour = "grey", linetype = "dotted")) +
+    theme(axis.title.y = element_text(margin = margin(r = 10)),
+          axis.title.x = element_text(margin = margin(t = 10)))
   # label in the middle of the prediction interval line
   # annotate("text", x = mid_age, y = mid_bmi + 1, label = "Prediction Window",
   #          color = embarktools::embark_colors[4],
@@ -272,7 +274,12 @@ plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = N
     ylab('Weight (lbs)') +
     embarktools::embark_theme_a +
     theme(panel.grid.major = element_line(colour = "grey", linetype = "dotted"),
-          legend.position = "none") # Remove the default legend
+          legend.position = "none") +
+    # make some padding between y-axis and y-axis label
+    theme(axis.title.y = element_text(margin = margin(r = 10)),
+          axis.title.x = element_text(margin = margin(t = 10)))
+    # Remove the default legend+
+
 
   # Create the legend plot
   legend_data <- data.frame(
