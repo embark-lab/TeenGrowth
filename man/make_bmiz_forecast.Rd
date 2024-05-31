@@ -6,27 +6,22 @@
 \usage{
 make_bmiz_forecast(
   data,
-  model = model,
   ci = 95,
-  lower_margin = lower_margin,
-  upper_margin = upper_margin,
-  central_value = central_value
+  lower_margin = NULL,
+  upper_margin = NULL,
+  central_value = c("mean", "max", "most_recent", "max+most_recent")
 )
 }
 \arguments{
 \item{data}{A data frame containing the input data.}
 
-\item{age}{Column name for age in the data frame.}
+\item{ci}{Confidence interval for the forecast.}
 
-\item{bmiz}{Column name for BMIz in the data frame.}
+\item{lower_margin}{Lower margin for the forecast.}
 
-\item{id}{Column name for id identifier.}
+\item{upper_margin}{Upper margin for the forecast.}
 
-\item{dob}{Column name for date of birth (optional).}
-
-\item{date_assessed}{Column name for date of assessment (optional).}
-
-\item{age_unit}{Unit of age (optional).}
+\item{central_value}{Central value for the forecast. Options are "mean", "max", "most_recent", "max+most_recent".}
 }
 \value{
 A forecast object for each id.

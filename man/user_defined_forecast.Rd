@@ -2,13 +2,13 @@
 % Please edit documentation in R/3.bmiz_forecast.R
 \name{user_defined_forecast}
 \alias{user_defined_forecast}
-\title{Fit Models and Generate Forecasts for BMIz Data}
+\title{Fit User Defined Forecast for BMIz Data}
 \usage{
 user_defined_forecast(
   data,
-  lower_margin = lower_margin,
-  upper_margin = upper_margin,
-  central_value = central_value
+  lower_margin = NULL,
+  upper_margin = NULL,
+  central_value = c("mean", "max", "most_recent", "max+most_recent")
 )
 }
 \arguments{
@@ -18,11 +18,11 @@ user_defined_forecast(
 
 \item{upper_margin}{Upper margin for the forecast.}
 
-\item{central_value}{Central value for the forecast.}
+\item{central_value}{Central value for the forecast. Options are "mean", "max", "most_recent", "max+most_recent".}
 }
 \value{
 A forecast object for each id.
 }
 \description{
-Fit Models and Generate Forecasts for BMIz Data
+Fit User Defined Forecast for BMIz Data
 }

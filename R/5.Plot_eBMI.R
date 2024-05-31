@@ -27,24 +27,24 @@ m2y <- function(age_m){
 plot_eBMI <- function(clean_data,
                       forecast_data,
                       px,
-                      ed_aoo = NA) {
+                      agemos_onset_ed = NA) {
 
   # make ed aao a column in the data if it is provided
-  if (!is.na(ed_aoo) & !is.null(ed_aoo)) {
-    clean_data$ed_aoo <- ed_aoo*12
+  if (!is.na(agemos_onset_ed)) {
+    clean_data$agemos_onset_ed <- agemos_onset_ed
   }
-  # if there is no column named ed_aoo, then make it == 10000
-  else if (!"ed_aoo" %in% colnames(clean_data)) {
-    clean_data$ed_aoo <- 10000
+  # if there is no column named agemos_onset_ed, then make it == 10000
+  else if (!"agemos_onset_ed" %in% colnames(clean_data)) {
+    clean_data$agemos_onset_ed <- 10000
   }
   else {
-    clean_data$ed_aoo <- 10000 }
+    clean_data$agemos_onset_ed <- 10000 }
 
     post_ed <- clean_data |>
-      filter(id == px & agemos >= ed_aoo)
+      filter(id == px & agemos >= agemos_onset_ed)
 
     pre_ed <- clean_data |>
-      filter(id == px & agemos < ed_aoo)
+      filter(id == px & agemos < agemos_onset_ed)
 
   data_2 <- forecast_data %>%
     filter(id == px)
@@ -187,7 +187,7 @@ plot_eBMI <- function(clean_data,
 #' # Assuming forecast_data is your dataframe and embarktools is loaded
 #' # plot_weight(forecast_data, "ARIMA", "95%", 1, a_height = 65)
 
-plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = NULL) {
+plot_weight <- function(clean_data, forecast_data, px, agemos_onset_ed = NA, a_height = NULL) {
   # if sex is 1, plot since age 16, if sex is 2, plot since age 14
 
 
@@ -201,13 +201,13 @@ plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = N
       mutate(adult_height_in = ifelse(is.na(adult_height_in), a_height, adult_height_in))
   }
 
-  # Make ed_aoo a column in the data if it is provided
-  if (!is.na(ed_aoo) & !is.null(ed_aoo)) {
-    clean_data$ed_aoo <- ed_aoo * 12
-  } else if (!"ed_aoo" %in% colnames(clean_data)) {
-    clean_data$ed_aoo <- 10000
+  # Make agemos_onset_ed a column in the data if it is provided
+  if (!is.na(agemos_onset_ed) & !is.null(agemos_onset_ed)) {
+    clean_data$agemos_onset_ed <- agemos_onset_ed
+  } else if (!"agemos_onset_ed" %in% colnames(clean_data)) {
+    clean_data$agemos_onset_ed <- 10000
   } else {
-    clean_data$ed_aoo <- 10000
+    clean_data$agemos_onset_ed <- 10000
   }
 
   # Same for clean data
@@ -216,11 +216,8 @@ plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = N
            age = agemos / 12) %>%
   filter(is.finite(weight) & id == px)
 
-  if (clean_data$sex[1] == 1) {
-    age_start <- 16
-  } else {
-    age_start <- 14
-  }
+    age_start <- clean_data$agemos_adult_ht[1]/12
+
   clean_data <- clean_data |>
     filter(agemos >= (age_start * 12))
 
@@ -239,9 +236,9 @@ plot_weight <- function(clean_data, forecast_data, px, ed_aoo = NA, a_height = N
   data$age <- data$agemos / 12
 
   post_ed <- clean_data %>%
-    filter(agemos >= ed_aoo)
+    filter(agemos >= agemos_onset_ed)
   pre_ed <- clean_data %>%
-    filter(agemos < ed_aoo)
+    filter(agemos < agemos_onset_ed)
 
   # Plot the data
   p <- ggplot2::ggplot(data = data, mapping = aes(x = age, y = eWeight)) +

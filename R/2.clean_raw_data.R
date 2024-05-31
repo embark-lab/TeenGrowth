@@ -50,6 +50,7 @@ clean_data <- function(data,
                            pct_col_name = NULL,
                            data_source = 'cdc',
                            adult_height_col_name = NULL,
+                           age_adult_ht_col_name = NULL,
                            ed_aoo_col_name = NULL) {
 # if id column is NULL, create a new id column and make the ID = 1
   if (is.null(id_col_name)) {
@@ -81,6 +82,7 @@ if (is.null(sex_col_name)) {
 data <- data |>
   mutate(sex = align_sex_coding(sex)[[sex_col_name]])
 
+
 # manage the adult_height column. if adult height column is provided, use this column and rename it 'adult_height' -- if it is not provided and ht_col_name is provided, make adult height = the most recent height measurement (oldest age) IF the age is > 14 years for females (sex == 2) or 16 years for males (sex ==1)
 # Handle adult height column
 
@@ -92,7 +94,7 @@ if (!is.null(adult_height_col_name)) {
     group_by(id) %>%
     arrange(desc(agemos)) %>%
     mutate(adult_height = ifelse(
-      (sex == 2 & agemos / 12 > 14) | (sex == 1 & agemos / 12 > 16),
+      (sex == 2 & ((agemos / 12) >= 14)) | (sex == 1 & ((agemos / 12) >= 16)),
       !!sym(ht_col_name),
       NA_real_
     )) %>%
@@ -176,29 +178,43 @@ if (!is.null(bmi_col_name)) {
   data$bmiz <- vectorized_bmiz_lookup(bmi = data$bmi, age = data$agemos, sex = data$sex, data_source = data_source)
   }
 
-# convert ed_aao to months if ed_aao_col_name is provided
+# Convert ed_aao to months if ed_aao_col_name is provided
 if (!is.null(ed_aoo_col_name)) {
-data <- data %>%
-  mutate(ed_aoo = vectorized_age_in_months(!!sym(ed_aoo_col_name), age_unit = age_unit))
+  data <- data %>%
+    mutate(agemos_ed_onset = vectorized_age_in_months(!!sym(ed_aoo_col_name), age_unit = age_unit))
 } else {
-  data$ed_aoo <- NA_real_
+  data$agemos_ed_onset <- NA_real_
   message("No eating disorder age of onset column was provided. Eating disorder age of onset has been set to NA -- can add this information later for plotting individuals")
 }
-# put all columns in the right order as noted at the top
-data <- data %>% select (id,
-                         sex,
-                         age_years,
-                         agemos,
-                         height_in,
-                         height_cm,
-                         weight_lb,
-                         weight_kg,
-                         adult_height_in,
-                         adult_height_cm,
-                         bmi,
-                         bmiz,
-                         ed_aoo)
+
+# Handle age at adult height
+if (!is.null(age_adult_ht_col_name)) {
+  data$agemos_adult_ht <- vectorized_age_in_months(!!sym(age_adult_ht_col_name), age_unit = age_unit)
+} else if (!is.null(ht_col_name)) {
+  data <- data %>%
+    group_by(id) %>%
+    filter((abs(height_cm - adult_height_cm)) <= 2) %>%
+    summarise(agemos_adult_ht = min(agemos, na.rm = TRUE)) %>%
+    right_join(data, by = "id")
+} else {
+  data$agemos_adult_ht <- NA_real_
+  message("No age at adult height column was provided, nor was height provided. Age at adult height has been set to NA -- can add this information later for plotting individuals")
+}
+
+# Select and order columns
+data <- data %>%
+  select(id, sex, age_years, agemos, height_in, height_cm, weight_lb, weight_kg, bmi, bmiz, adult_height_in, adult_height_cm, agemos_adult_ht , agemos_ed_onset)
+
+# Handle duplicate rows by averaging numeric columns
+data <- data %>%
+  group_by(id, agemos) %>%
+  summarise(across(everything(), ~ ifelse(is.numeric(.), mean(., na.rm = TRUE), first(.))), .groups = 'drop') %>%
+  ungroup()
+
 return(data)
 }
+
+
+
 
 

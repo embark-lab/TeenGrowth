@@ -22,6 +22,7 @@ clean_data(
   pct_col_name = NULL,
   data_source = "cdc",
   adult_height_col_name = NULL,
+  age_adult_ht_col_name = NULL,
   ed_aoo_col_name = NULL
 )
 }

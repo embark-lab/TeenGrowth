@@ -6,7 +6,6 @@
 \usage{
 make_full_bmi_df(
   data,
-  model,
   ci,
   adult_height = "adult_height_in",
   id = "id",
@@ -17,8 +16,6 @@ make_full_bmi_df(
 }
 \arguments{
 \item{data}{A cleaned data frame containing BMI data.}
-
-\item{model}{The model type used for forecasting.}
 
 \item{ci}{The confidence interval level.}
 
@@ -31,6 +28,8 @@ make_full_bmi_df(
 \item{upper_margin}{The upper margin for the user-defined forecast.}
 
 \item{central_value}{The central value for the user-defined forecast.}
+
+\item{model}{The model type used for forecasting.}
 }
 \value{
 A full BMI data frame with processed forecasts and cutoffs.
