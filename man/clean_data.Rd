@@ -21,7 +21,7 @@ clean_data(
   bmiz_col_name = NULL,
   pct_col_name = NULL,
   data_source = "cdc",
-  adult_height_col_name = NULL,
+  adult_ht_col_name = NULL,
   age_adult_ht_col_name = NULL,
   ed_aoo_col_name = NULL
 )
@@ -57,7 +57,7 @@ clean_data(
 
 \item{data_source}{The source of the data ('cdc' or other). Defaults to 'cdc'.}
 
-\item{adult_height_col_name}{The name of the column containing adult height values. Defaults to NULL.}
+\item{adult_ht_col_name}{The name of the column containing adult height values. Defaults to NULL.}
 }
 \value{
 A data frame with columns for id, agemos, sex, adult_height, bmi, and bmiz.

@@ -187,7 +187,11 @@ plot_eBMI <- function(clean_data,
 #' # Assuming forecast_data is your dataframe and embarktools is loaded
 #' # plot_weight(forecast_data, "ARIMA", "95%", 1, a_height = 65)
 
-plot_weight <- function(clean_data, forecast_data, px, agemos_onset_ed = NA, a_height = NULL) {
+plot_weight <- function(clean_data,
+                        forecast_data,
+                        px,
+                        agemos_onset_ed = NA,
+                        a_height = NULL) {
   # if sex is 1, plot since age 16, if sex is 2, plot since age 14
 
 

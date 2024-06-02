@@ -8,7 +8,7 @@
 #'
 cull_demos <- function(data) {
   df1_demos <- data |>
-    select(id, sex, adult_height_in) |>
+    select(id, sex, adult_height_in, agemos_adult_ht) |>
     unique()
   # make sex a double
   return(df1_demos)
@@ -55,7 +55,8 @@ cutoffs_by_participant <- function(data) {
 #' @param type Type of BMI data (default: 'bmiz').
 #' @return A vector of BMI values.
 #' @export
-apply_bmi_lookup <- function(data, data_point_col,
+apply_bmi_lookup <- function(data,
+                             data_point_col,
                              age_col = agemos,
                              data_source =
                              'cdc',
@@ -102,9 +103,9 @@ add_eBMI_to_df <- function(data,
            upper_eWeight = solve_for_weight(bmi = upper_eBMI,
                                             height = adult_height_in)) |>
     # make eWeight, lower_eWeight, and upper_eWeight NA for agemos < 14*12
-    mutate(eWeight = ifelse(agemos < 14*12, NA, eWeight),
-           lower_eWeight = ifelse(agemos < 14*12, NA, lower_eWeight),
-           upper_eWeight = ifelse(agemos < 14*12, NA, upper_eWeight))
+    mutate(eWeight = ifelse(agemos < agemos_adult_ht, NA, eWeight),
+           lower_eWeight = ifelse(agemos < agemos_adult_ht, NA, lower_eWeight),
+           upper_eWeight = ifelse(agemos < agemos_adult_ht, NA, upper_eWeight))
 
   return(data)
 }
@@ -151,7 +152,8 @@ make_full_bmi_df <- function(data,
                                                          'agemos',
                                                          'sex',
                                                          'adult_height_in'))
-  full_df <- add_eBMI_to_df(data = full_df, adult_height = adult_height)
+  full_df <- add_eBMI_to_df(data = full_df,
+                            adult_height = adult_height)
 
   return(full_df)
 }
@@ -201,7 +203,7 @@ clean_and_process <- function(data,
                               bmiz_col_name = NULL,
                               pct_col_name = NULL,
                               data_source = 'cdc',
-                              adult_height_col_name = NULL,
+                              adult_ht_col_name = NULL,
                               age_adult_ht_col_name = NULL,
                               lower_margin = 0.5,
                               upper_margin = 0.5,
@@ -221,7 +223,7 @@ clean_and_process <- function(data,
                            bmiz_col_name = bmiz_col_name,
                            pct_col_name = pct_col_name,
                            data_source = data_source,
-                           adult_height_col_name = adult_height_col_name,
+                           adult_ht_col_name = adult_ht_col_name,
                            age_adult_ht_col_name = age_adult_ht_col_name,
                            ed_aoo_col_name = ed_aoo_col_name)
   full_df <- make_full_bmi_df(clean_data,

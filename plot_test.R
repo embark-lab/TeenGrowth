@@ -8,6 +8,7 @@ clean_data <- clean_data(demo,
                          sex_col_name = 'sex',
                          wt_unit = 'lb',
                          ht_unit = 'in',
+                         adult_ht_col_name= 'adult_height_in',
                          ed_aoo_col_name = 'ed_aoo'
 )
 
@@ -19,8 +20,8 @@ forecast_input <- clean_data |>
                   filter(agemos < agemos_ed_onset[1])
 
 forecast_data <- make_full_bmi_df(forecast_input,
-                                  central_value = 'mean',
-                                  ci = 'User-Defined',
+                                  central_value = 'most_recent',
+                                  ci = 95,
                                   lower_margin = 0.5,
                                   upper_margin = 0.5)
 
@@ -31,4 +32,7 @@ plot_eBMI(clean_data,
         px = px,
         agemos_onset_ed = forecast_input$agemos_ed_onset[1])
 
-
+plot_weight(clean_data,
+            forecast_data,
+            px = px,
+            agemos_onset_ed = forecast_input$agemos_ed_onset[1])

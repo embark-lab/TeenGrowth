@@ -24,8 +24,8 @@
 #' @param bmiz_col_name The name of the column containing BMIZ values. Defaults to NULL.
 #' @param pct_col_name The name of the column containing percentile values. Defaults to NULL.
 #' @param data_source The source of the data ('cdc' or other). Defaults to 'cdc'.
-#' @param adult_height_col_name The name of the column containing adult height values. Defaults to NULL.
-#'
+#' @param adult_ht_col_name The name of the column containing adult height values. Defaults to NULL.
+#' @import zoo
 #' @return A data frame with columns for id, agemos, sex, adult_height, bmi, and bmiz.
 #'
 #' @examples
@@ -49,10 +49,16 @@ clean_data <- function(data,
                            bmiz_col_name = NULL,
                            pct_col_name = NULL,
                            data_source = 'cdc',
-                           adult_height_col_name = NULL,
+                           adult_ht_col_name = NULL,
                            age_adult_ht_col_name = NULL,
                            ed_aoo_col_name = NULL) {
-# if id column is NULL, create a new id column and make the ID = 1
+
+  # if age is specified in years, provide message that it is highly recommended that age be specified to at least one decimal place
+  if (!is.null(age_unit) & age_unit == 'years') {
+    message("Ages have been provided in years in the current data. It is highly recommended that age in years be specified to at least one decimal place for accurate forecasting.")
+  }
+  # if id column is NULL, create a new id column and make the ID = 1
+
   if (is.null(id_col_name)) {
     data$id <- 1
   } else {
@@ -86,9 +92,9 @@ data <- data |>
 # manage the adult_height column. if adult height column is provided, use this column and rename it 'adult_height' -- if it is not provided and ht_col_name is provided, make adult height = the most recent height measurement (oldest age) IF the age is > 14 years for females (sex == 2) or 16 years for males (sex ==1)
 # Handle adult height column
 
-if (!is.null(adult_height_col_name)) {
+if (!is.null(adult_ht_col_name)) {
   data <- data %>%
-    mutate(adult_height = data[[adult_height_col_name]])
+    mutate(adult_height = data[[adult_ht_col_name]])
 } else if (!is.null(ht_col_name)) {
   data <- data %>%
     group_by(id) %>%
@@ -190,20 +196,97 @@ if (!is.null(ed_aoo_col_name)) {
 # Handle age at adult height
 if (!is.null(age_adult_ht_col_name)) {
   data$agemos_adult_ht <- vectorized_age_in_months(!!sym(age_adult_ht_col_name), age_unit = age_unit)
+} else if (!is.null(ht_col_name) & !is.null(adult_ht_col_name)) {
+  data <- data %>%
+    group_by(id) %>%
+    filter((abs(height_cm - adult_height_cm)) <= 2) %>%
+    summarise(agemos_adult_ht = min(agemos, na.rm = TRUE)) %>%
+    right_join(data, by = "id")
+  # if age at adult height is NA and the oldest age for girls is < 14, set age at adult height to 14
+data_youngs <- data |>
+  group_by(id) |>
+  filter(ifelse (sex == 2, max(agemos) < 168, max(agemos) < 192)) |>
+  mutate(agemos_adult_ht = ifelse(sex == 2, 168, 192)) |>
+  ungroup()
+
+# replace the age at adult height in the original data with the new age at adult height for the youngs
+data <- data |>
+  anti_join(data_youngs, by = "id") |>
+  bind_rows(data_youngs)
+
+  message ("Adult height was provided but age at which this height was reached is not provided. For girls with a height recording after 14 years old and boys with a height recording after 16 years old, age at adult height has been set to the age at which the height is first within 2 cm of adult height. For girls with no height recorded after age 14 and boys with no height recorded after age 16, age at adult height has been set to age 14 (168 months) for girls and age 16 (192 months) for boys. If this is not accurate, please provide the age at adult height in the dataset.")
+
 } else if (!is.null(ht_col_name)) {
   data <- data %>%
     group_by(id) %>%
     filter((abs(height_cm - adult_height_cm)) <= 2) %>%
     summarise(agemos_adult_ht = min(agemos, na.rm = TRUE)) %>%
     right_join(data, by = "id")
+ message("No age at adult height column was provided, but height was provided. Age at adult height has been set to the age at which height is first within 2 cm of adult height (Height at oldest age where height was recorded after age 14 for girls at 16 for boys). If this is not accurate, please provide the age at adult height in the dataset.")
 } else {
   data$agemos_adult_ht <- NA_real_
-  message("No age at adult height column was provided, nor was height provided. Age at adult height has been set to NA -- can add this information later for plotting individuals")
+  message("No age at adult height column was provided, nor was height provided. Age at adult height has been set to NA -- you may add this information later for plotting individuals")
 }
 
 # Select and order columns
 data <- data %>%
   select(id, sex, age_years, agemos, height_in, height_cm, weight_lb, weight_kg, bmi, bmiz, adult_height_in, adult_height_cm, agemos_adult_ht , agemos_ed_onset)
+
+
+# Custom interpolation function for height
+interpolate_height <- function(agemos, height, window = 9) {
+  # Initialize the result as the original height values
+  interpolated_height <- height
+
+  # Identify the indices of missing values
+  na_indices <- which(is.na(height))
+
+  # Loop over each missing value
+  for (i in na_indices) {
+    # Define the window range
+    lower_bound <- agemos[i] - window
+    upper_bound <- agemos[i] + window
+
+    # Find known values within the window
+    within_window <- which(agemos >= lower_bound & agemos <= upper_bound & !is.na(height))
+
+    # Check if there are at least two known values within the window
+    if (length(within_window) >= 2) {
+      # Interpolate the missing value using the known values within the window
+      interpolated_height[i] <- approx(agemos[within_window], height[within_window], xout = agemos[i])$y
+    }
+  }
+
+  return(interpolated_height)
+}
+
+# Apply the custom interpolation function
+
+
+# if there are missing height values after agemos > agemos_adult_ht, set them to adult height
+if (any(is.na(data$height_cm))) {
+  data <- data %>%
+    group_by(id) %>%
+    mutate(height_cm = ifelse(agemos > agemos_adult_ht, adult_height_cm, height_cm),
+           height_in = ifelse(agemos > agemos_adult_ht, adult_height_in, height_in)) %>%
+    ungroup()
+  message("Height values were missing. Missing values after age at adult height and have been set to adult height.")
+}
+# if there are missing height values before agemos > agemos_adult_ht, interpolate them
+
+if (any(is.na(data$height_cm))) {
+data <- data %>%
+  group_by(id) %>%
+  mutate(height_cm = interpolate_height(agemos, height_cm, window = 9),
+         height_in = interpolate_height(agemos, height_in, window = 9)) %>%
+  ungroup()
+message("Height values were missing and have been interpolated using a window of 9 months.")
+}
+
+# remove data before 24 months
+data <- data %>%
+  filter(agemos >= 24)
+
 
 # Handle duplicate rows by averaging numeric columns
 data <- data %>%

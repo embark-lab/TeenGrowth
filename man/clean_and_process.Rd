@@ -22,7 +22,7 @@ clean_and_process(
   bmiz_col_name = NULL,
   pct_col_name = NULL,
   data_source = "cdc",
-  adult_height_col_name = NULL,
+  adult_ht_col_name = NULL,
   age_adult_ht_col_name = NULL,
   lower_margin = 0.5,
   upper_margin = 0.5,
@@ -64,11 +64,11 @@ clean_and_process(
 
 \item{data_source}{Data source for BMI lookup (default: 'cdc').}
 
-\item{adult_height_col_name}{Column name for adult height (default: NULL).}
-
 \item{lower_margin}{The lower margin for the user-defined forecast.}
 
 \item{upper_margin}{The upper margin for the user-defined forecast.}
+
+\item{adult_height_col_name}{Column name for adult height (default: NULL).}
 }
 \value{
 A full BMI data frame with processed forecasts and cutoffs.
