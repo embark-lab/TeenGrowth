@@ -54,7 +54,7 @@ clean_data <- function(data,
                            ed_aoo_col_name = NULL) {
 
   # if age is specified in years, provide message that it is highly recommended that age be specified to at least one decimal place
-  if (!is.null(age_unit) & age_unit == 'years') {
+  if (!is.null(age_unit) && age_unit == 'years') {
     message("Ages have been provided in years in the current data. It is highly recommended that age in years be specified to at least one decimal place for accurate forecasting.")
   }
   # if id column is NULL, create a new id column and make the ID = 1
@@ -106,7 +106,7 @@ if (!is.null(adult_ht_col_name)) {
     )) %>%
     fill(adult_height, .direction = "down") %>%
     ungroup()
-  message("Adult height was not provided -- Adult height has been set to the oldest height obtained after age 14 for girls and after age 16 for boys.")
+  message("Adult height was not provided but height is-- Adult height has been set to the oldest height obtained after age 14 for girls and after age 16 for boys.")
 
 }
 else {

@@ -4,18 +4,12 @@
 \alias{add_eBMI_to_df}
 \title{Add eBMI to Data Frame}
 \usage{
-add_eBMI_to_df(
-  data,
-  adult_height = adult_height_in,
-  agemos_adult_ht = agemos_adult_ht
-)
+add_eBMI_to_df(data, adult_height = adult_height_in)
 }
 \arguments{
 \item{data}{A data frame containing BMI data.}
 
 \item{adult_height}{Column name for adult height.}
-
-\item{agemos_adult_ht}{Column name in months when adult height is reached.}
 }
 \value{
 A data frame with added eBMI and weight columns.
