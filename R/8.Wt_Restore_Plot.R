@@ -9,7 +9,7 @@
 #' @import rlang
 #' @export
 
-plot_weight_2 <- function(clean_data, forecast_data, slope_per_week = 0.5) {
+Wt_Restore_Plot <- function(clean_data, forecast_data, slope_per_week = 0.5) {
 
   start_date <- clean_data$static_data$tx_start_date
   dob <- clean_data$static_data$dob
