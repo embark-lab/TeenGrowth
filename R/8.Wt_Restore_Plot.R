@@ -71,7 +71,7 @@ Wt_Restore_Plot <- function(clean_data, forecast_data, slope_per_week = 0.5) {
   forecast_data_filtered <- forecast_data %>%
     filter(date_assessed >= x_start & date_assessed <= x_end)
   dynamic_data_filtered <- clean_data$dynamic_data %>%
-    filter(date_assessed >= x_start & date_assessed <= x_end)
+    filter(date_assessed >= start_date & date_assessed <= x_end)
 
   # Set y-axis limits
   y_min <- min(forecast_data_filtered$lower_eWeight, dynamic_data_filtered$weight_lbs, na.rm = TRUE) - 10
@@ -101,7 +101,7 @@ Wt_Restore_Plot <- function(clean_data, forecast_data, slope_per_week = 0.5) {
     geom_point(data = dynamic_data_filtered, mapping = aes(x = date_assessed, y = weight_lbs),
                fill = embarktools::embark_colors[3],
                col = embarktools::embark_colors[1],
-               size = 3,
+               size = 4,
                shape = 21) +
     geom_line(data = line_data_1, mapping = aes(x = date_assessed, y = weight_lbs),
               col = embarktools::embark_colors[1], linetype = "dotted", size = 2) +
@@ -117,9 +117,9 @@ Wt_Restore_Plot <- function(clean_data, forecast_data, slope_per_week = 0.5) {
                                                  label = paste("EBW Goal:",
                                                                format(date_assessed, "%b %d, %Y"),
                                                                "\nWeight:", round(eWeight, 1))),
-              vjust = -1, hjust = 1, color = embarktools::embark_colors[1], size = 4) +
+              vjust = -1, hjust = 1, color = embarktools::embark_colors[1], size = 5) +
     geom_text(aes(x = annotation_date, y = annotation_weight, label = "Expected Weight"),
-              vjust = -1, hjust = 0.5, color = embarktools::embark_colors[4], size = 4) +
+              vjust = -1, hjust = 0.5, color = embarktools::embark_colors[4], size = 5) +
     geom_text(aes(x = start_date, y = start_weight,
                   label = paste("Start Weight:\n", round(start_weight, 1))),
               vjust = 2, hjust = 0.5, color = embarktools::embark_colors[1], size = 4) +
@@ -141,7 +141,7 @@ Wt_Restore_Plot <- function(clean_data, forecast_data, slope_per_week = 0.5) {
                   linetype = "dotted") +
       geom_text(aes(x = last_point$date_assessed + 30, y = last_point$weight_lbs,
                     label = paste("Current Trend: \n", round(slope_best_fit, 2), "lbs/week")),
-                vjust = 0.5, hjust = 0, color = embarktools::embark_colors[3], size = 4)
+                vjust = 0.5, hjust = 0, color = embarktools::embark_colors[1], size = 5)
   }
 
   # Label the expected trend line with slope specification
