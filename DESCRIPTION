@@ -24,10 +24,11 @@ Imports:
     tsibble,
     fable,
     fabletools,
-    purrr,
     embarktools, 
     ggpubr,
-    zscorer
+    zscorer,
+    rlang,
+    zoo
 Suggests:
     knitr,
     rmarkdown,
