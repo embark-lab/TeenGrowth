@@ -170,19 +170,20 @@ tx_plot_clean <- function(filtered_data,
              weight_kgs = (!!sym(bmi_col_name)) * (convert_height(static_data$prediction_ht_in, 'in', 'cm')^2) / 10000)
   } else if (is.null(wt_col_name) && is.null(bmi_col_name) && !is.null(bmiz_col_name)) {
     dynamic_data <- dynamic_data %>%
-      mutate(agemos = age_days / 30.4375) %>%
-      mutate(bmi = vectorized_bmi_lookup(data_point = !!sym(bmiz_col_name),
-                                         age = agemos,
-                                         sex = sex,
-                                         type = 'bmiz',
-                                         data_source = data_source)) %>%
+      mutate(agemos = age_days / 30.4375)
+
+    dynamic_data$bmi <- vectorized_bmi_lookup(data_point = dynamic_data[[bmiz_col_name]], age = dynamic_data$agemos, sex = static_data$sex, type = 'bmiz', age_unit = 'months', data_source = 'cdc')
+
+      dynamic_data <- dynamic_data %>%
       mutate(weight_lbs = bmi * (static_data$prediction_ht_in^2) / 703,
              weight_kgs = bmi * (convert_height(static_data$prediction_ht_in, 'in', 'cm')^2) / 10000)
-  } else if (is.null(wt_col_name) && is.null(bmi_col_name) && is.null(bmiz_col_name) && !is.null(pct_col_name)) {
+  }
+  else if (is.null(wt_col_name) && is.null(bmi_col_name) && is.null(bmiz_col_name) && !is.null(pct_col_name)) {
     dynamic_data <- dynamic_data %>%
-      mutate(agemos = age_days / 30.4375) %>%
+      mutate(agemos = age_days / 30.4375) |>
       mutate(bmi = vectorized_bmi_lookup(data_point = !!sym(pct_col_name),
                                          age = agemos,
+                                         age_unit = 'months',
                                          sex = sex,
                                          type = 'pct',
                                          data_source = data_source)) %>%
