@@ -78,6 +78,7 @@ tx_plot_clean <- function(filtered_data,
   tx_start_age_days <- as.numeric(difftime(tx_start_date, dob, units = "days"))
 
   vectorized_age_in_days <- Vectorize(age_in_days, vectorize.args = c("age", "dob", "date_assessed"))
+  vectorized_bmi_lookup <- Vectorize(bmi_lookup, vectorize.args = c("data_point", "age", "sex"))
 
   static_data <- list(
     dob = dob,
