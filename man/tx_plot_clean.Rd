@@ -43,7 +43,7 @@ tx_plot_clean(
 
 \item{ht_unit}{The unit of the height column (e.g., cm, in)}
 
-\item{wt_unit}{The unit of the weight column (e.g., kg, lbs)}
+\item{wt_unit}{The unit of the weight column (e.g., kg, lb)}
 
 \item{bmi_col_name}{The name of the column containing the BMI of the participant}
 

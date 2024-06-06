@@ -12,17 +12,19 @@
 #'
 #' @export
 age_unit <- function(age) {
-  if (age > 365 * 5) {
-    age_unit <- 'days'
+  if (is.na(age)) {
+    return(NA)
+  } else if (age > 365 * 5) {
+    return('days')
   } else if (age > 52 * 5) {
-    age_unit <- 'weeks'
+    return('weeks')
   } else if (age > 12 * 3) {
-    age_unit <- 'months'
+    return('months')
   } else {
-    age_unit <- 'years'
+    return('years')
   }
-  return(age_unit)
 }
+
 
 #' Convert age from various units to days.
 #'
@@ -48,19 +50,23 @@ age_in_days <- function(age, age_unit = NULL, dob = NULL, date_assessed = NULL) 
     age_unit <- age_unit(age)
   }
 
-  if (age_unit == 'years') {
-    age_in_days <- age * 365.25
+  if (is.na(age) || is.na(age_unit)) {
+    return(NA)
+  } else if (age_unit == 'years') {
+    return(age * 365.25)
   } else if (age_unit == 'months') {
-    age_in_days <- age * 30.4375
+    return(age * 30.4375)
   } else if (age_unit == 'weeks') {
-    age_in_days <- age * 7
+    return(age * 7)
   } else if (age_unit == 'days') {
-    age_in_days <- age
+    return(age)
   } else if (age_unit == 'dates') {
-    age_in_days <- as.numeric(difftime(date_assessed, dob, units = 'days'))
+    return(as.numeric(difftime(date_assessed, dob, units = 'days')))
+  } else {
+    return(NA)
   }
-  return(age_in_days)
 }
+
 
 #' Convert age in days to age in months (rounded).
 #'

@@ -13,7 +13,7 @@ clean_data_1 <- clean_data(demo,
                          age_unit = 'years')
 
 
-px <- 1
+px <- 2
 
 forecast_input <- clean_data_1 |>
                   filter(id == px) |>
@@ -38,24 +38,8 @@ plot_weight(clean_data_1,
             agemos_onset_ed = forecast_input$agemos_ed_onset[1])
 
 # Example usage
-clean_data <- tx_plot_clean(demo |> filter(participant == 1),
-                            dob = '2007-12-30',
-                            age_col_name = 'age',
-                            tx_start_date = '2024-01-01',
-                            ht_col_name = 'height',
-                            ht_unit  = 'in',
-                            sex = 2,
-                            wt_col_name = 'weight',
-                            wt_unit = 'lbs')
-
-# Ensure forecast_data is provided for testing
-
-plot_weight_2(clean_data, forecast_data, slope_per_week = 1)
-
-
-# Example usage
-clean_data <- tx_plot_clean(demo %>% filter(participant == 1),
-                            dob = '2008-01-01',
+clean_data <- tx_plot_clean(demo %>% filter(participant == 2),
+                            dob = '2008-11-01',
                             age_col_name = 'age',
                             age_unit = 'years',
                             tx_start_date = '2024-01-01',
@@ -64,4 +48,11 @@ clean_data <- tx_plot_clean(demo %>% filter(participant == 1),
                             sex = 2,
                             wt_col_name = 'weight',
                             wt_unit = 'lbs')
+
+# Ensure forecast_data is provided for testing
+
+Wt_Restore_Plot(clean_data, forecast_data, slope_per_week = 1)
+
+
+
 
