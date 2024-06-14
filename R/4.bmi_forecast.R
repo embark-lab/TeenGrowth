@@ -128,7 +128,7 @@ add_eBMI_to_df <- function(data,
 #' @import dplyr
 #' @return A full BMI data frame with processed forecasts and cutoffs.
 #' @export
-make_full_bmi_df <- function(data,
+forecast_bmi <- function(data,
                              ci,
                              adult_height = 'adult_height_in',
                              id = 'id',
@@ -226,7 +226,7 @@ clean_and_process <- function(data,
                            adult_ht_col_name = adult_ht_col_name,
                            age_adult_ht_col_name = age_adult_ht_col_name,
                            ed_aoo_col_name = ed_aoo_col_name)
-  full_df <- make_full_bmi_df(clean_data,
+  full_df <- forecast_bmi(clean_data,
                               central_value = central_value,
                               ci = ci,
                               lower_margin = lower_margin,

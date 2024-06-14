@@ -106,6 +106,13 @@ if (!is.null(adult_ht_col_name)) {
     )) %>%
     fill(adult_height, .direction = "down") %>%
     ungroup()
+
+  # make the adult height column in cm if it is not already
+  # if the adult height column exists -- make it in cm
+  data$adult_height_cm <- height_in_cm(data$adult_height, ht_unit)
+  # make an adult height in inches column for show - convert adult height to inches
+  data$adult_height_in <- data$adult_height_cm / 2.54
+
   message("Adult height was not provided but height is-- Adult height has been set to the oldest height obtained after age 14 for girls and after age 16 for boys.")
 
 }
@@ -115,11 +122,6 @@ else {
   data$adult_height_in <- NA_real_
   message("Neither height nor an adult height column were provided. Adult height has been set to NA.")
 }
-# make the adult height column in cm if it is not already
-# if the adult height column exists -- make it in cm
-data$adult_height_cm <- height_in_cm(data$adult_height, ht_unit)
-# make an adult height in inches column for show - convert adult height to inches
-data$adult_height_in <- data$adult_height_cm / 2.54
 
 # manage the height and weight columns, if they exist -- make sure they are in cm and kg
 # Handle height and weight columns
