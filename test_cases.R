@@ -1,9 +1,9 @@
 
-demo  <- clean_data(test_data_3,
-                     adult_height_col_name = 'adult_ht_in',
+demo  <- clean_data(demo,
+                     adult_ht_col_name = 'adult_height_in',
                      ht_col_name = 'height',
+                     wt_col_name = 'weight',
                      ht_unit = 'in',
-                     bmiz_col_name = 'bmiz',
                      age_col_name = 'age',
                      sex_col_name = 'sex',
                      id_col_name = 'participant')

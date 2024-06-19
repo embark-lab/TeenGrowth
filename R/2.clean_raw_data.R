@@ -95,6 +95,11 @@ data <- data |>
 if (!is.null(adult_ht_col_name)) {
   data <- data %>%
     mutate(adult_height = data[[adult_ht_col_name]])
+  # make the adult height column in cm if it is not already
+  data$adult_height_cm <- height_in_cm(data$adult_height, ht_unit)
+  # make an adult height in inches column for show - convert adult height to inches
+  data$adult_height_in <- data$adult_height_cm / 2.54
+
 } else if (!is.null(ht_col_name)) {
   data <- data %>%
     group_by(id) %>%
