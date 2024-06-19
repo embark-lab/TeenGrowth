@@ -27,7 +27,7 @@ make_bmiz_tsibble <- function(data) {
 #' @param data A tsibble containing the BMIz data.
 #' @param lower_margin Lower margin for the forecast.
 #' @param upper_margin Upper margin for the forecast.
-#' @param central_value Central value for the forecast. Options are "mean", "max", "most_recent", "max+most_recent".
+#' @param central_value Central value for the forecast. Options are "mean", "max", "most_recent", "mean+most_recent".
 #' @import tibble
 #' @import dplyr
 #' @return A forecast object for each id.
@@ -35,7 +35,7 @@ make_bmiz_tsibble <- function(data) {
 user_defined_forecast <- function(data,
                                   lower_margin = NULL,
                                   upper_margin = NULL,
-                                  central_value = c("mean", "max", "most_recent", "max+most_recent")) {
+                                  central_value = c("mean", "max", "most_recent", "mean+most_recent")) {
   central_value <- match.arg(central_value)
 
   if (is.null(lower_margin) || is.null(upper_margin)) {
@@ -48,10 +48,10 @@ user_defined_forecast <- function(data,
     central_bmiz <- max(data$bmiz, na.rm = TRUE)
   } else if (central_value == "most_recent") {
     central_bmiz <- data$bmiz[which.max(data$agemos)]
-  } else if (central_value == "max+most_recent") {
+  } else if (central_value == "mean+most_recent") {
     central_bmiz <- (mean(data$bmiz, na.rm = TRUE) + max(data$bmiz, na.rm = TRUE)) / 2
   } else {
-    stop("Invalid central_value. Choose 'mean', 'max', 'most_recent', or 'max+most_recent'.")
+    stop("Invalid central_value. Choose 'mean', 'max', 'most_recent', or 'mean+most_recent'.")
   }
 
   forecast <- tibble(
@@ -70,7 +70,7 @@ user_defined_forecast <- function(data,
 #' Fit Models and Generate Forecasts for BMIz Data
 #'
 #' @param ts_data A tsibble containing the BMIz data.
-#' @param central_value Central value for the forecast. Options are "mean", "max", "most_recent", "max+most_recent".
+#' @param central_value Central value for the forecast. Options are "mean", "max", "most_recent", "mean+most_recent".
 #' @param ci Confidence interval for the forecast.
 #' @param lower_margin Lower margin for the forecast.
 #' @param upper_margin Upper margin for the forecast.
@@ -82,7 +82,7 @@ user_defined_forecast <- function(data,
 #' @import purrr
 #' @export
 fit_and_forecast_bmiz <- function(ts_data,
-                                  central_value = c("mean", "max", "most_recent", "max+most_recent"),
+                                  central_value = c("mean", "max", "most_recent", "mean+most_recent"),
                                   ci = 95,
                                   lower_margin = NULL,
                                   upper_margin = NULL) {
@@ -106,7 +106,7 @@ fit_and_forecast_bmiz <- function(ts_data,
     bmiz_fit <- fit_forecast(ts_data, "mean", MEAN(bmiz), ci)
   } else if (central_value == "most_recent" && (ci == 95 || ci == 99)) {
     bmiz_fit <- fit_forecast(ts_data, "most_recent", ARIMA(bmiz ~ pdq(0,1,0)), ci)
-  } else if (central_value == "max+most_recent" && (ci == 95 || ci == 99)) {
+  } else if (central_value == "mean+most_recent" && (ci == 95 || ci == 99)) {
     bmiz_fit <- ts_data %>%
       model(
         Mean = MEAN(bmiz),
@@ -173,14 +173,14 @@ fit_and_forecast_bmiz <- function(ts_data,
 #' @param ci Confidence interval for the forecast.
 #' @param lower_margin Lower margin for the forecast.
 #' @param upper_margin Upper margin for the forecast.
-#' @param central_value Central value for the forecast. Options are "mean", "max", "most_recent", "max+most_recent".
+#' @param central_value Central value for the forecast. Options are "mean", "max", "most_recent", "mean+most_recent".
 #' @return A forecast object for each id.
 #' @export
 make_bmiz_forecast <- function(data,
                                ci = 95,
                                lower_margin = NULL,
                                upper_margin = NULL,
-                               central_value = c("mean", "max", "most_recent", "max+most_recent")) {
+                               central_value = c("mean", "max", "most_recent", "mean+most_recent")) {
   central_value <- match.arg(central_value)
 
   ts_data <- make_bmiz_tsibble(data)
