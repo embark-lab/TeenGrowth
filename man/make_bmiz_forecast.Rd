@@ -9,7 +9,7 @@ make_bmiz_forecast(
   ci = 95,
   lower_margin = NULL,
   upper_margin = NULL,
-  central_value = c("mean", "max", "most_recent", "max+most_recent")
+  central_value = c("mean", "max", "most_recent", "mean+most_recent")
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ make_bmiz_forecast(
 
 \item{upper_margin}{Upper margin for the forecast.}
 
-\item{central_value}{Central value for the forecast. Options are "mean", "max", "most_recent", "max+most_recent".}
+\item{central_value}{Central value for the forecast. Options are "mean", "max", "most_recent", "mean+most_recent".}
 }
 \value{
 A forecast object for each id.
