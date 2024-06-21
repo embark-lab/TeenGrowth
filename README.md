@@ -21,7 +21,8 @@ To install the \`R/scorekeeper\` using the \`install_github\` function: use the 
 
 ```
 devtools::install.packages("remotes") 
-library(remotes) 
+library(remotes)
+install_github("embark-lab/embarktools")
 install_github("embark-lab/TeenGrowth")
 ```
 
