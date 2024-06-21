@@ -1,6 +1,7 @@
 # TeenGrowth
 
-#### A package for wrangling and predicting bmi-related data in adolescent samples,by Katherine Schaumberg
+#### A package for wrangling and predicting bmi-related data in adolescent samples
+#### by Katherine Schaumberg
 
 ## Overview
 
