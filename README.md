@@ -19,8 +19,7 @@ The `TeenGrowth` package includes functions for:
 
 To install the \`R/scorekeeper\` using the \`install_github\` function: use the following code:
 
-```         
-r 
+```
 devtools::install.packages("remotes") 
 library(remotes) 
 install_github("embark-lab/TeenGrowth")
@@ -30,8 +29,7 @@ install_github("embark-lab/TeenGrowth")
 
 Here is an example of how to use the `TeenGrowth` package:
 
-```         
-r
+``` 
 # Load the package
 library(TeenGrowth)
 
