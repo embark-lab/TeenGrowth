@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # TeenGrowth
 
 #### A package for wrangling and predicting bmi-related data in adolescent samples,by Katherine Schaumberg
@@ -22,8 +16,7 @@ The `TeenGrowth` package includes functions for:
 
 ## Installation
 
-To install the \`R/scorekeeper\` using the \`install_github\` function:
-use the following code:
+To install the \`R/scorekeeper\` using the \`install_github\` function: use the following code:
 
 ```         
 r 
@@ -56,48 +49,36 @@ plot_eBMI(clean_data = cleaned_data, forecast_data = bmi_forecast, px = 1)
 
 ## Shiny Application
 
-The `TeenGrowth` package includes a Shiny application to provide an
-interactive interface for data input, model selection, and weight
-restoration planning, available at:
+The `TeenGrowth` package includes a Shiny application to provide an interactive interface for data input, model selection, and weight restoration planning, available at:
 
 ### Shiny App Structure
 
 The Shiny application is structured into several tabs:
 
-1.  **Data Input**: Upload your data file (CSV or Excel) or use provided
-    demo data.
+1.  **Data Input**: Upload your data file (CSV or Excel) or use provided demo data.
 
-2.  **Data Specification**: Map your data columns to the required
-    fields.
+2.  **Data Specification**: Map your data columns to the required fields.
 
-3.  **Model Selection**: Select a model to run on your data and view the
-    predictions.
+3.  **Model Selection**: Select a model to run on your data and view the predictions.
 
-4.  **Weight Restoration Planning**: Plan a weight restoration strategy
-    based on the predictions.
+4.  **Weight Restoration Planning**: Plan a weight restoration strategy based on the predictions.
 
-5.  **Background and FAQ**: Provides additional information and usage
-    instructions.
+5.  **Background and FAQ**: Provides additional information and usage instructions.
 
 ### Example Workflow in the Shiny App
 
 1.  **Data Input**: Upload your data or select demo data.
 
-2.  **Data Specification**: Specify the columns corresponding to
-    required fields.
+2.  **Data Specification**: Specify the columns corresponding to required fields.
 
 3.  **Model Selection**: Select a model and generate predictions.
 
-4.  **Weight Restoration Planning**: Input relevant parameters and
-    visualize the restoration plan.
+4.  **Weight Restoration Planning**: Input relevant parameters and visualize the restoration plan.
 
 ## Contributing
 
-We welcome contributions from the community. If you have any
-suggestions, bug reports, or feature requests, please open an issue or
-submit a pull request on GitHub.
+We welcome contributions from the community. If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request on GitHub.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for
-details.
+This project is licensed under the MIT License. See the LICENSE file for details.
