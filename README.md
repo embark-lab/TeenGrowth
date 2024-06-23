@@ -78,7 +78,3 @@ The Shiny application is structured into several tabs:
 ## Contributing
 
 We welcome contributions from the community. If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request on GitHub.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
