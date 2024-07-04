@@ -104,25 +104,74 @@ fit_and_forecast_bmiz <- function(ts_data,
 
   if (central_value == "mean" && (ci == 95 || ci == 99)) {
     bmiz_fit <- fit_forecast(ts_data, "mean", MEAN(bmiz), ci)
-  } else if (central_value == "most_recent" && (ci == 95 || ci == 99)) {
-    bmiz_fit <- fit_forecast(ts_data, "most_recent", ARIMA(bmiz ~ pdq(0,1,0)), ci)
-  } else if (central_value == "mean+most_recent" && (ci == 95 || ci == 99)) {
-    bmiz_fit <- ts_data %>%
-      model(
-        Mean = MEAN(bmiz),
-        ARIMA = ARIMA(bmiz ~ pdq(0,1,0))
-      ) %>%
-      mutate(ARIMA_mean = (ARIMA + Mean) / 2) %>%
-      forecast(h = 120) %>%
-      hilo(level = ci) %>%
-      as_tibble() %>%
-      mutate(agemos = as.integer(agemos),
-             lower_eBMIz = map_dbl(.data[[paste0(ci, "%")]], ~ .x$lower),
-             upper_eBMIz = map_dbl(.data[[paste0(ci, "%")]], ~ .x$upper)) %>%
-      rename(eBMIz = .mean) %>%
-      select(id, .model, agemos, eBMIz, lower_eBMIz, upper_eBMIz) %>%
-      filter(.model == "ARIMA_mean")
-  } else if (central_value == "max" && (ci == 95 || ci == 99)) {
+
+  # Defunct most_recent which uses the ARIMA model -- noted in simulations to produce low specificity -- replaced with below
+  ##else if (central_value == "most_recent" && (ci == 95 || ci == 99)) {
+ ## bmiz_fit <- fit_forecast(ts_data, "most_recent", ARIMA(bmiz ~ pdq(0,1,0)), ci)
+
+  }  else if (central_value == "most_recent" && (ci == 95 || ci == 99)) {
+      bmiz_fit <- fit_forecast(ts_data, "mean", MEAN(bmiz), ci)
+
+
+      most_recent_bmiz <- as.data.frame(ts_data)%>%
+        group_by(id) %>%
+        arrange(desc(agemos)) %>%
+        slice(1) %>%
+        select(id, most_recent_bmiz = bmiz)
+
+      bmiz_fit <- bmiz_fit %>%
+        left_join(most_recent_bmiz, by = "id") %>%
+        mutate(.most_recent = most_recent_bmiz,
+               .diff = .most_recent - eBMIz,
+               lower_eBMIz = lower_eBMIz + .diff,
+               upper_eBMIz = upper_eBMIz + .diff,
+               eBMIz = eBMIz + .diff) %>%
+       select(id, .model, agemos, eBMIz, lower_eBMIz, upper_eBMIz)
+
+ ## Also defunct for same reason -- replaced by below
+# else if (central_value == "mean+most_recent" && (ci == 95 || ci == 99)) {
+#     bmiz_fit <- ts_data %>%
+#       model(
+#         Mean = MEAN(bmiz),
+#         ARIMA = ARIMA(bmiz ~ pdq(0,1,0))
+#       ) %>%
+#       mutate(ARIMA_mean = (ARIMA + Mean) / 2) %>%
+#       forecast(h = 120) %>%
+#       hilo(level = ci) %>%
+#       as_tibble() %>%
+#       mutate(agemos = as.integer(agemos),
+#              lower_eBMIz = map_dbl(.data[[paste0(ci, "%")]], ~ .x$lower),
+#              upper_eBMIz = map_dbl(.data[[paste0(ci, "%")]], ~ .x$upper)) %>%
+#       rename(eBMIz = .mean) %>%
+#       select(id, .model, agemos, eBMIz, lower_eBMIz, upper_eBMIz) %>%
+#       filter(.model == "ARIMA_mean")
+#
+  }  else if (central_value == "mean+most_recent" && (ci == 95 || ci == 99)) {
+      bmiz_fit <- fit_forecast(ts_data, "mean", MEAN(bmiz), ci)
+
+      most_recent_bmiz <- as.data.frame(ts_data) %>%
+        group_by(id) %>%
+        arrange(desc(agemos)) %>%
+        slice(1) %>%
+        select(id, most_recent_bmiz = bmiz)
+
+      mean_bmiz <- ts_data %>%
+        group_by(id) %>%
+        summarize(mean_bmiz = mean(bmiz, na.rm = TRUE))
+
+      mean_most_recent_bmiz <- most_recent_bmiz %>%
+        left_join(mean_bmiz, by = "id") %>%
+        mutate(mean_most_recent_bmiz = (most_recent_bmiz + mean_bmiz) / 2)
+
+      bmiz_fit <- bmiz_fit %>%
+        left_join(mean_most_recent_bmiz, by = "id") %>%
+        mutate(.mean_most_recent = mean_most_recent_bmiz,
+               .diff = .mean_most_recent - eBMIz,
+               lower_eBMIz = lower_eBMIz + .diff,
+               upper_eBMIz = upper_eBMIz + .diff,
+               eBMIz = eBMIz + .diff) %>%
+        select(id, .model, agemos, eBMIz, lower_eBMIz, upper_eBMIz)
+    } else if (central_value == "max" && (ci == 95 || ci == 99)) {
     bmiz_fit <- fit_forecast(ts_data, "max", MEAN(bmiz), ci)
 
     max_bmiz <- as.data.frame(ts_data) %>%
