@@ -47,8 +47,3 @@ A data frame with BMI-Z scores added as 'bmiz' column.
 \description{
 This function takes a dataset and calculates BMI-Z scores.
 }
-\examples{
-data <- data.frame(wt = c(70, 65), ht = c(175, 160), age = c(25, 30), sex = c('Male', 'Female'))
-calculate_bmiz(data, wt = "wt", ht = "ht", age = "age", wt_units = "kg", ht_units = "cm", dob = NULL, date_assessed = NULL)
-calculate_bmiz(data, bmi = "bmi", age = "age", dob = NULL, date_assessed = NULL)
-}

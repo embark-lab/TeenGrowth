@@ -27,24 +27,24 @@ m2y <- function(age_m){
 plot_eBMI <- function(clean_data,
                       forecast_data,
                       px,
-                      agemos_onset_ed = NA) {
+                      agemos_ed_onset = NA) {
 
   # make ed aao a column in the data if it is provided
-  if (!is.na(agemos_onset_ed)) {
-    clean_data$agemos_onset_ed <- agemos_onset_ed
+  if (!is.na(agemos_ed_onset)) {
+    clean_data$agemos_ed_onset <- agemos_ed_onset
   }
-  # if there is no column named agemos_onset_ed, then make it == 10000
-  else if (!"agemos_onset_ed" %in% colnames(clean_data)) {
-    clean_data$agemos_onset_ed <- 10000
+  # if there is no column named agemos_ed_onset, then make it == 10000
+  else if ("agemos_ed_onset" %in% colnames(clean_data)) {
+    clean_data$agemos_ed_onset <- clean_data$agemos_ed_onset
   }
-  else {
-    clean_data$agemos_onset_ed <- 10000 }
+    else {
+    clean_data$agemos_ed_onset <- 10000 }
 
     post_ed <- clean_data |>
-      filter(id == px & agemos >= agemos_onset_ed)
+      filter(id == px & agemos >= agemos_ed_onset)
 
     pre_ed <- clean_data |>
-      filter(id == px & agemos < agemos_onset_ed)
+      filter(id == px & agemos < agemos_ed_onset)
 
   data_2 <- forecast_data %>%
     filter(id == px)
@@ -190,7 +190,7 @@ plot_eBMI <- function(clean_data,
 plot_weight <- function(clean_data,
                         forecast_data,
                         px,
-                        agemos_onset_ed = NA,
+                        agemos_ed_onset = NA,
                         a_height = NULL) {
   # if sex is 1, plot since age 16, if sex is 2, plot since age 14
 
@@ -205,13 +205,17 @@ plot_weight <- function(clean_data,
       mutate(adult_height_in = ifelse(is.na(adult_height_in), a_height, adult_height_in))
   }
 
-  # Make agemos_onset_ed a column in the data if it is provided
-  if (!is.na(agemos_onset_ed) & !is.null(agemos_onset_ed)) {
-    clean_data$agemos_onset_ed <- agemos_onset_ed
-  } else if (!"agemos_onset_ed" %in% colnames(clean_data)) {
-    clean_data$agemos_onset_ed <- 10000
-  } else {
-    clean_data$agemos_onset_ed <- 10000
+  # Make agemos_ed_onset a column in the data if it is provided
+  if (!is.na(agemos_ed_onset) & !is.null(agemos_ed_onset)) {
+    clean_data$agemos_ed_onset <- agemos_ed_onset
+  } else if (!"agemos_ed_onset" %in% colnames(clean_data)) {
+    clean_data$agemos_ed_onset <- 10000
+  }
+    else if ("agemos_ed_onset" %in% colnames(clean_data)) {
+      clean_data$agemos_ed_onset <- clean_data$agemos_ed_onset
+    }
+ else {
+    clean_data$agemos_ed_onset <- 10000
   }
 
   # Same for clean data
@@ -240,9 +244,9 @@ plot_weight <- function(clean_data,
   data$age <- data$agemos / 12
 
   post_ed <- clean_data %>%
-    filter(agemos >= agemos_onset_ed)
+    filter(agemos >= agemos_ed_onset)
   pre_ed <- clean_data %>%
-    filter(agemos < agemos_onset_ed)
+    filter(agemos < agemos_ed_onset)
 
   # Plot the data
   p <- ggplot2::ggplot(data = data, mapping = aes(x = age, y = eWeight)) +
@@ -267,8 +271,10 @@ plot_weight <- function(clean_data,
                col = embarktools::embark_colors[1],
                fill = embarktools::embark_colors[2],
                shape = 21) +
-    scale_x_continuous(breaks = seq(age_start, max(data$age), by = 1),
-                       labels = seq(age_start, max(data$age), by = 1)) +
+    scale_x_continuous(
+      breaks = seq(round(age_start, 0), round(max(data$age), 0), by = 1),
+      labels = seq(round(age_start, 0), round(max(data$age), 0), by = 1)
+    ) +
     geom_ribbon(mapping = aes(ymin = lower_eWeight, ymax = upper_eWeight), fill = embarktools::embark_colors[4], alpha = 0.3) +
     ggtitle("Weight Prediction") +
     xlab('Age (years)') +

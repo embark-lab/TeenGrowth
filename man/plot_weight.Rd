@@ -8,7 +8,7 @@ plot_weight(
   clean_data,
   forecast_data,
   px,
-  agemos_onset_ed = NA,
+  agemos_ed_onset = NA,
   a_height = NULL
 )
 }

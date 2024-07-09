@@ -29,10 +29,6 @@ Wt_Restore_Plot <- function(clean_data, forecast_data, slope_per_week = 0.5) {
   start_weight <- clean_data$static_data$intake_wt_lbs
   slope <- slope_per_week / 7  # Convert lbs per week to lbs per day
 
-  # Debug prints
-  print(paste("Start weight:", start_weight))
-  print(paste("Slope:", slope))
-
   # Find the crossing point
   forecast_data <- forecast_data %>%
     arrange(date_assessed) %>%
@@ -42,11 +38,6 @@ Wt_Restore_Plot <- function(clean_data, forecast_data, slope_per_week = 0.5) {
   crossing_row <- forecast_data %>%
     filter(crossing_point) %>%
     slice(1)
-
-  print(crossing_row)  # Debug print to check the crossing row
-
-  # Debug print to check predicted abline values
-  print(forecast_data %>% select(date_assessed, predicted_abline))
 
   # Determine end date
   if (nrow(crossing_row) > 0) {

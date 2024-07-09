@@ -65,7 +65,7 @@ bmiz_zscorer <- function(data, wt, ht, age, wt_units = 'kg', ht_units = 'cm', se
 #' @return A data frame with BMI-Z scores added as 'bmiz' column.
 #' @import dplyr
 #' @import distributional
-#' @importFrom magittr %>%
+#' @importFrom magrittr %>%
 #' @export
 
 add_bmiz <- function(data, wt = NULL, ht = NULL, age, bmi = NULL, wt_units = 'kg', data_source = 'cdc', ht_units = 'cm', sex = 2, dob = NULL, date_assessed = NULL) {
