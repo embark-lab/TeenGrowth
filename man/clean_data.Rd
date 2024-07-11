@@ -66,8 +66,3 @@ A data frame with columns for id, agemos, sex, adult_height, bmi, and bmiz.
 Clean BMI data
 This function intakes raw data and creates columns for id, agemos, sex, adult height, BMI, and BMIZ. It handles various formats for sex and height/weight units, calculates age in months, and manages missing columns.
 }
-\examples{
-raw_data <- data.frame(id = 1:5, sex = c("M", "F", "M", "F", "M"), age = c(16, 17, 18, 19, 20), height = c(160, 165, 170, 175, 180), weight = c(60, 65, 70, 75, 80))
-clean_data(raw_data, id_col_name = "id", age_col_name = "age", sex_col_name = "sex", ht_col_name = "height", wt_col_name = "weight")
-
-}

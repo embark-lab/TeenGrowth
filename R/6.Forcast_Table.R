@@ -11,9 +11,6 @@
 #' @param ci The confidence interval type to filter the data. Default is '95%'.
 #' @return A cleaned and processed data frame with the age in years, expected
 #' BMI, and expected weight, formatted appropriately.
-#' @examples
-#' # Assuming 'forecast_data' is a data frame containing the relevant columns
-#' clean_data <- clean_forecast_data(forecast_data, px = 12345)
 #' @export
 clean_forecast_data <- function(data,
                                 px,

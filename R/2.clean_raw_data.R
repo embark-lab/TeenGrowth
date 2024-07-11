@@ -27,11 +27,6 @@
 #' @param adult_ht_col_name The name of the column containing adult height values. Defaults to NULL.
 #' @import zoo
 #' @return A data frame with columns for id, agemos, sex, adult_height, bmi, and bmiz.
-#'
-#' @examples
-#' raw_data <- data.frame(id = 1:5, sex = c("M", "F", "M", "F", "M"), age = c(16, 17, 18, 19, 20), height = c(160, 165, 170, 175, 180), weight = c(60, 65, 70, 75, 80))
-#' clean_data(raw_data, id_col_name = "id", age_col_name = "age", sex_col_name = "sex", ht_col_name = "height", wt_col_name = "weight")
-#'
 #' @export
 #'
 clean_data <- function(data,
@@ -69,7 +64,7 @@ clean_data <- function(data,
   if (is.null(age_col_name) & is.null(dob_col_name) & is.null(date_assessed_col_name)) {
     stop('age column is required') }
   if (!is.null(dob_col_name) & !is.null(date_assessed_col_name)) {
-    data$age_days <- as.numeric(lubridate::difftime(data[[date_assessed_col_name]], data[[dob_col_name]], units = 'days'))
+    data$age_days <- as.numeric(difftime(data[[date_assessed_col_name]], data[[dob_col_name]], units = 'days'))
     age_col_name <- 'age_days' }
   # Convert age column to months
   data <- data %>%

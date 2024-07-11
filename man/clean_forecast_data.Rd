@@ -25,7 +25,3 @@ patient ID, model type, and confidence interval. It formats the data to
 include only ages divisible by 6 and rounds all numerical values to one
 decimal place. It also formats the expected BMI and expected weight.
 }
-\examples{
-# Assuming 'forecast_data' is a data frame containing the relevant columns
-clean_data <- clean_forecast_data(forecast_data, px = 12345)
-}

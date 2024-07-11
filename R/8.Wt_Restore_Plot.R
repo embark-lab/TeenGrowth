@@ -7,6 +7,7 @@
 #' @import dplyr
 #' @import lubridate
 #' @import rlang
+#' @importFrom stats approx coef lm qnorm
 #' @export
 
 Wt_Restore_Plot <- function(clean_data, forecast_data, slope_per_week = 0.5) {

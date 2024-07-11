@@ -15,10 +15,6 @@
 #' @param date_assessed Date of assessment (optional).
 #'
 #' @return A data frame with BMI-Z scores added as 'bmiz' column.
-#'
-#' @examples
-#' data <- data.frame(wt = c(70, 65), ht = c(175, 160), age = c(25, 30), sex = c('Male', 'Female'))
-#' add_bmiz(data, wt = "wt", ht = "ht", age = "age", wt_units = "kg", ht_units = "cm", dob = NULL, date_assessed = NULL)
 #' @import dplyr
 #' @import zscorer
 #' @export
