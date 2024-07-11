@@ -32,16 +32,18 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install all dependencies
-        run: |
-          Rscript -e 'install.packages("remotes")'
-          Rscript -e 'remotes::install_github("embark-lab/EMBARK-tools")'
-          Rscript -e 'install.packages(c("distributional", "dplyr", "ggplot2", "lubridate", "magrittr", "purrr", "tidyr", "tsibble", "fable", "fabletools", "ggpubr", "zscorer", "rlang", "zoo"))'
-          Rscript -e 'install.packages(c("knitr", "rmarkdown", "testthat"))'
+      - name: Install remotes
+        run: Rscript -e 'install.packages("remotes")'
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::pkgdown, local::.
+      - name: Install embarktools from GitHub
+        run: Rscript -e 'remotes::install_github("embark-lab/EMBARK-tools")'
+
+      - name: Install other dependencies
+        run: |
+          Rscript -e 'install.packages(c("distributional", "dplyr", "ggplot2", "lubridate", "magrittr", "purrr", "tidyr", "tsibble", "fable", "fabletools", "ggpubr", "zscorer", "rlang", "zoo", "knitr", "rmarkdown", "testthat"))'
+
+      - name: Install pkgdown
+        run: Rscript -e 'install.packages("pkgdown")'
 
       - name: Build site
         run: Rscript -e 'pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)'
