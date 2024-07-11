@@ -34,7 +34,7 @@ jobs:
 
       - name: Install remotes and dependencies
         run: |
-          install.packages("remotes")
+          Rscript -e 'install.packages("remotes")'
           Rscript -e 'remotes::install_github("embark-lab/EMBARK-tools")'
           Rscript -e 'remotes::install_deps(dependencies = TRUE)'
 
