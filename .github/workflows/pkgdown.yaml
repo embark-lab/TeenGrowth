@@ -32,16 +32,17 @@ jobs:
         with:
           use-public-rspm: true
 
+      # Install remotes to allow installation from GitHub
+      - name: Install remotes
+        run: Rscript -e 'install.packages("remotes")'
+
+      # Install embarktools from GitHub before setting up other dependencies
+      - name: Install embarktools from GitHub
+        run: Rscript -e 'remotes::install_github("embark-lab/EMBARK-tools")'
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
-          
-      - name: Install remotes
-        run: install.packages("remotes")
-        
-      - name: Install additional dependencies
-        run: |
-          Rscript -e 'remotes::install_github("embark-lab/EMBARK-tools")'
 
       - name: Build site
         run: Rscript -e 'pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)'
