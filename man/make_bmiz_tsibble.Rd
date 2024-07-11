@@ -7,13 +7,7 @@
 make_bmiz_tsibble(data)
 }
 \arguments{
-\item{cleaned_data}{A data frame containing the input data - cleaned per clean_data function}
-
-\item{dob}{Column name for date of birth (optional).}
-
-\item{date_assessed}{Column name for date of assessment (optional).}
-
-\item{age_unit}{Unit of age (optional).}
+\item{data}{A data frame containing the input data - cleaned per clean_data function}
 }
 \value{
 A tsibble with the BMIz data.

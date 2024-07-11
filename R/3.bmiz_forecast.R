@@ -1,12 +1,10 @@
 
 #' Create tsibble for BMIz Data
 #'
-#' @param cleaned_data A data frame containing the input data - cleaned per clean_data function
-#' @param dob Column name for date of birth (optional).
+#' @param data A data frame containing the input data - cleaned per clean_data function
 #' @import dplyr
-#' @import tsibble
-#' @param date_assessed Column name for date of assessment (optional).
-#' @param age_unit Unit of age (optional).
+#' @importFrom tsibble as_tsibble
+#' @importFrom tsibble fill_gaps
 #' @return A tsibble with the BMIz data.
 #' @export
 #'
@@ -28,7 +26,7 @@ make_bmiz_tsibble <- function(data) {
 #' @param lower_margin Lower margin for the forecast.
 #' @param upper_margin Upper margin for the forecast.
 #' @param central_value Central value for the forecast. Options are "mean", "max", "most_recent", "mean+most_recent".
-#' @import tibble
+#' @importFrom tidyr tibble
 #' @import dplyr
 #' @return A forecast object for each id.
 #' @export
@@ -78,8 +76,8 @@ user_defined_forecast <- function(data,
 #' @import fable
 #' @import fabletools
 #' @import dplyr
-#' @import tsibble
-#' @import purrr
+#' @importFrom tsibble as_tsibble
+#' @importFrom purrr map_dbl
 #' @export
 fit_and_forecast_bmiz <- function(ts_data,
                                   central_value = c("mean", "max", "most_recent", "mean+most_recent"),

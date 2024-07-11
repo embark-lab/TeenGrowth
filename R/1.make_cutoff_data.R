@@ -29,10 +29,10 @@ solve_for_weight_metric <- function(bmi, height){
 
 #' @title Cutoff BMI
 #' @description Makes Cutoff BMIs
-#' @param data 'data'
 #' @param sex '1 = Male, 2 = Female'
 #' @param age 'age in months'
 #' @param adult_height 'adult height in inches'
+#' @param data_source 'cdc' or 'who'
 #' @import dplyr
 #' @return bmi scores based on bmiz and age
 #' @export

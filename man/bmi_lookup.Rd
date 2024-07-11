@@ -18,6 +18,8 @@ bmi_lookup(
 \arguments{
 \item{data_point}{'bmiz score or bmi percentile'}
 
+\item{type}{'bmiz' or 'pct'}
+
 \item{data_source}{Data source ('cdc' or 'wgsr')}
 
 \item{sex}{'1 = Male, 2 = Female'}
@@ -25,6 +27,10 @@ bmi_lookup(
 \item{age}{'age'}
 
 \item{age_unit}{'unit of age - optional'}
+
+\item{dob}{'date of birth'}
+
+\item{date_assessed}{'date of assessment}
 }
 \value{
 bmi scores based on bmiz and age

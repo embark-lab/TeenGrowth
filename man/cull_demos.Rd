@@ -7,7 +7,7 @@
 cull_demos(data)
 }
 \arguments{
-\item{cleaned_data}{A cleaned data frame containing demographic information.}
+\item{data}{A cleaned data frame containing demographic information.}
 }
 \value{
 A data frame with aligned demographics data.

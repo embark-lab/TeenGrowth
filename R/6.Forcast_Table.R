@@ -8,7 +8,6 @@
 #' @param data A data frame containing forecast data.
 #' @param px The patient ID to filter the data.
 #' @param model The model type to filter the data. Default is 'ARIMA_mean'.
-#' @param ci The confidence interval type to filter the data. Default is '95%'.
 #' @return A cleaned and processed data frame with the age in years, expected
 #' BMI, and expected weight, formatted appropriately.
 #' @export

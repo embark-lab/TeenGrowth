@@ -68,6 +68,8 @@ tx_plot_clean(
 \item{ed_aoo}{The age of onset of the eating disorder}
 
 \item{tx_start_date}{The start date of the treatment}
+
+\item{intake_wt}{The intake weight of the participant}
 }
 \value{
 A cleaned and processed data frame with the age in years, expected

@@ -24,6 +24,7 @@ calculate_bmi <- function(weight,
 
 #' Function that converts weight from pounds (lb) to kilograms (kg).
 #' @param weight Weight value in pounds (lb) or kilograms (kg) (default).
+#' @param weight_units Unit of weight measurement ('kg' or 'lbs').
 #' @return Weight value converted to kilograms (kg).
 #' @export
 weight_in_kg <- function(weight,

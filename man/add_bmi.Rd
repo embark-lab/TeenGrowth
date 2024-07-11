@@ -2,19 +2,7 @@
 % Please edit documentation in R/2.add_bmi.R
 \name{add_bmi}
 \alias{add_bmi}
-\title{Add BMI to data frame
-@param data Data frame
-@param age Age column
-@param normed_bmi Normalized BMI column (either bmi percentile or bmiz score)
-@param data_source Data source ('cdc' or 'wgsr') - Default to 'cdc'
-@param type 'bmiz' or 'pct' - Default to 'bmiz'
-@param sex sex - 1 = Male; 2 = Female - Default to Female
-@param dob Date of birth column (optional)
-@param date_assessed Date assessed column (optional)
-@param age_unit Unit of age column (optional)
-@import dplyr
-@return data frame with BMI column added
-@export}
+\title{Add BMI to Data Frame}
 \usage{
 add_bmi(
   data,
@@ -28,18 +16,28 @@ add_bmi(
   age_unit = NULL
 )
 }
+\arguments{
+\item{data}{A data frame containing the necessary columns.}
+
+\item{age}{A column in \code{data} representing the age of individuals.}
+
+\item{normed_bmi}{A column in \code{data} representing the normalized BMI (either BMI percentile or BMI z-score).}
+
+\item{data_source}{A string specifying the data source, either 'cdc' or 'wgsr'. Default is 'cdc'.}
+
+\item{type}{A string specifying the type of normalized BMI, either 'bmiz' for BMI z-score or 'pct' for BMI percentile. Default is 'bmiz'.}
+
+\item{sex}{A column in \code{data} representing the sex of individuals, where 1 = Male and 2 = Female. Default is 2 (Female).}
+
+\item{dob}{(Optional) A column in \code{data} representing the date of birth.}
+
+\item{date_assessed}{(Optional) A column in \code{data} representing the date of assessment.}
+
+\item{age_unit}{(Optional) A string specifying the unit of the age column.}
+}
+\value{
+A data frame with an added BMI column.
+}
 \description{
-Add BMI to data frame
-@param data Data frame
-@param age Age column
-@param normed_bmi Normalized BMI column (either bmi percentile or bmiz score)
-@param data_source Data source ('cdc' or 'wgsr') - Default to 'cdc'
-@param type 'bmiz' or 'pct' - Default to 'bmiz'
-@param sex sex - 1 = Male; 2 = Female - Default to Female
-@param dob Date of birth column (optional)
-@param date_assessed Date assessed column (optional)
-@param age_unit Unit of age column (optional)
-@import dplyr
-@return data frame with BMI column added
-@export
+This function adds a BMI column to a data frame based on age, sex, and normalized BMI (BMI percentile or BMI z-score).
 }

@@ -25,7 +25,9 @@
 #' @param pct_col_name The name of the column containing percentile values. Defaults to NULL.
 #' @param data_source The source of the data ('cdc' or other). Defaults to 'cdc'.
 #' @param adult_ht_col_name The name of the column containing adult height values. Defaults to NULL.
-#' @import zoo
+#' @param age_adult_ht_col_name The name of the column containing age at adult height values. Defaults to NULL.
+#' @param ed_aoo_col_name The name of the column containing age at onset of puberty values. Defaults to NULL.
+#' @importFrom zoo na.approx
 #' @return A data frame with columns for id, agemos, sex, adult_height, bmi, and bmiz.
 #' @export
 #'

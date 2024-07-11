@@ -2,18 +2,24 @@
 % Please edit documentation in R/1.age_math.R
 \name{age_in_months}
 \alias{age_in_months}
-\title{Convert age in days to age in months (rounded).}
+\title{Convert age to age in months (rounded).}
 \usage{
 age_in_months(age, age_unit = NULL, dob = NULL, date_assessed = NULL)
 }
 \arguments{
-\item{age_days}{Numeric value representing the age in days.}
+\item{age}{age}
+
+\item{age_unit}{(Optional) A character string specifying the unit of the input age ('years', 'months', 'days').}
+
+\item{dob}{(Optional) The date of birth as a character string in the format 'YYYY-MM-DD'.}
+
+\item{date_assessed}{(Optional) The date of assessment as a character string in the format 'YYYY-MM-DD'.}
 }
 \value{
 Numeric value representing the age in months (rounded to the nearest month).
 }
 \description{
-Convert age in days to age in months (rounded).
+Convert age to age in months (rounded).
 }
 \examples{
 age_in_months(365)  # Returns 12

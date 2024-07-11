@@ -38,6 +38,9 @@ bmi_to_bmiz <- function(l, m, s, bmi) {
 #' BMI Lookup
 #' @param data_point 'bmiz score or bmi percentile'
 #' @param data_source Data source ('cdc' or 'wgsr')
+#' @param type 'bmiz' or 'pct'
+#' @param dob 'date of birth'
+#' @param date_assessed 'date of assessment
 #' @param sex '1 = Male, 2 = Female'
 #' @param age 'age'
 #' @param age_unit 'unit of age - optional'
@@ -96,6 +99,8 @@ bmi_lookup <- function(data_point, type = 'bmiz', data_source = 'cdc', sex = 2, 
 #' @param sex '1 = Male, 2 = Female'
 #' @param age 'age'
 #' @param age_unit 'unit of age - optional'
+#' @param dob 'date of birth'
+#' @param date_assessed 'date of assessment'
 #' @import dplyr
 #' @return bmiz scores based on bmi and age
 #' @export

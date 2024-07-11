@@ -64,11 +64,15 @@ clean_and_process(
 
 \item{data_source}{Data source for BMI lookup (default: 'cdc').}
 
+\item{adult_ht_col_name}{Column name for adult height (default: NULL).}
+
+\item{age_adult_ht_col_name}{Column name for age at adult height (default: NULL).}
+
 \item{lower_margin}{The lower margin for the user-defined forecast.}
 
 \item{upper_margin}{The upper margin for the user-defined forecast.}
 
-\item{adult_height_col_name}{Column name for adult height (default: NULL).}
+\item{ed_aoo_col_name}{Column name for age at onset of eating disorder (default: NULL).}
 }
 \value{
 A full BMI data frame with processed forecasts and cutoffs.

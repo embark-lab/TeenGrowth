@@ -12,8 +12,6 @@ clean_forecast_data(data, px, model)
 \item{px}{The patient ID to filter the data.}
 
 \item{model}{The model type to filter the data. Default is 'ARIMA_mean'.}
-
-\item{ci}{The confidence interval type to filter the data. Default is '95\%'.}
 }
 \value{
 A cleaned and processed data frame with the age in years, expected

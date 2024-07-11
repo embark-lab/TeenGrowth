@@ -7,15 +7,13 @@
 plot_eBMI(clean_data, forecast_data, px, agemos_ed_onset = NA)
 }
 \arguments{
-\item{data}{'data'}
+\item{clean_data}{'clean data'}
 
-\item{agemos}{'age column'}
+\item{forecast_data}{'forecast data'}
 
-\item{sex}{'1 = Male, 2 = Female'}
+\item{px}{'participant id'}
 
-\item{age}{'age in months'}
-
-\item{adult_height_in}{'adult height in in'}
+\item{agemos_ed_onset}{'age of ED onset'}
 }
 \value{
 plot

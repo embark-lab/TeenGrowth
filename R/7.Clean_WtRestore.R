@@ -40,6 +40,7 @@ convert_weight <- function(weight, from_unit, to_unit) {
 #' @param age_adult_ht The age at which the adult height was measured
 #' @param ed_aoo The age of onset of the eating disorder
 #' @param tx_start_date The start date of the treatment
+#' @param intake_wt The intake weight of the participant
 #' @return A cleaned and processed data frame with the age in years, expected
 #' BMI, and expected weight, formatted appropriately.
 #' @import dplyr

@@ -2,7 +2,7 @@
 #'
 #' Align participant, sex coding, and add adult height and sex columns, if available.
 #'
-#' @param cleaned_data A cleaned data frame containing demographic information.
+#' @param data A cleaned data frame containing demographic information.
 #' @return A data frame with aligned demographics data.
 #' @export
 #'
@@ -117,7 +117,6 @@ add_eBMI_to_df <- function(data,
 #' Create a full BMI data frame by processing forecasts, generating cutoffs, and adding eBMI values.
 #'
 #' @param data A cleaned data frame containing BMI data.
-#' @param model The model type used for forecasting.
 #' @param ci The confidence interval level.
 #' @param id Column name for IDs (default: 'id').
 #' @param adult_height Column name for adult height (default: 'adult_height').
@@ -178,10 +177,12 @@ forecast_bmi <- function(data,
 #' @param bmiz_col_name Column name for BMI z-score (default: NULL).
 #' @param pct_col_name Column name for BMI percentile (default: NULL).
 #' @param data_source Data source for BMI lookup (default: 'cdc').
-#' @param adult_height_col_name Column name for adult height (default: NULL).
 #' @param lower_margin The lower margin for the user-defined forecast.
 #' @param upper_margin The upper margin for the user-defined forecast.
 #' @param central_value The central value for the user-defined forecast.
+#' @param adult_ht_col_name Column name for adult height (default: NULL).
+#' @param age_adult_ht_col_name Column name for age at adult height (default: NULL).
+#' @param ed_aoo_col_name Column name for age at onset of eating disorder (default: NULL).
 #' @return A full BMI data frame with processed forecasts and cutoffs.
 #' @export
 #' @import dplyr

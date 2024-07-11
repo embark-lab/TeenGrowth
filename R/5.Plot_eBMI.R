@@ -11,11 +11,10 @@ m2y <- function(age_m){
 
 #' @title plot_eBMI
 #' @description plot eBMI
-#' @param data 'data'
-#' @param agemos 'age column'
-#' @param sex '1 = Male, 2 = Female'
-#' @param age 'age in months'
-#' @param adult_height_in 'adult height in in'
+#' @param clean_data 'clean data'
+#' @param forecast_data 'forecast data'
+#' @param px 'participant id'
+#' @param agemos_ed_onset 'age of ED onset'
 #' @import dplyr
 #' @import ggplot2
 #' @import embarktools
@@ -83,7 +82,7 @@ plot_eBMI <- function(clean_data,
                 fill = embarktools::embark_colors[4], alpha = 0.3) +
     stat_smooth(mapping = aes (x = agemos, y =eBMI), data = data_2, col = embarktools::embark_colors[3],
                 size = 2) +
-    scale_x_continuous(breaks = 12*0:240, label = m2y(12*0:240)) +
+    scale_x_continuous(breaks = 12*0:240, labels = m2y(12*0:240)) +
     stat_smooth(mapping = aes(x = agemos, y = median_bmi), data = forecast_data, col = embarktools::embark_colors[1], linetype = 'dotted', position = 'identity')+
     stat_smooth(mapping = aes(x = agemos, y = UW_cutoff_bmi), data = forecast_data, col = embarktools::embark_colors[6], linetype = 'dotted', position = 'identity' )+
     xlab('Age') +
@@ -173,11 +172,11 @@ plot_eBMI <- function(clean_data,
 #'
 #' This function plots the weight forecast data for a given participant, model, and confidence interval.
 #'
+#' @param clean_data A data frame containing the clean data.
 #' @param forecast_data A data frame containing the forecast data.
-#' @param model The model type used for forecasting.
-#' @param ci The confidence interval level.
-#' @param px The participant ID to filter the data.
-#' @param a_height Optional parameter to specify the adult height if it is not available in the data.
+#' @param px The participant ID.
+#' @param agemos_ed_onset The age of onset of the eating disorder.
+#' @param a_height The adult height of the participant.
 #' @return A ggplot object displaying the weight forecast.
 #' @import ggplot2
 #' @import dplyr

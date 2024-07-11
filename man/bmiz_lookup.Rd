@@ -24,6 +24,10 @@ bmiz_lookup(
 \item{data_source}{Data source ('cdc' or 'wgsr')}
 
 \item{age_unit}{'unit of age - optional'}
+
+\item{dob}{'date of birth'}
+
+\item{date_assessed}{'date of assessment'}
 }
 \value{
 bmiz scores based on bmi and age

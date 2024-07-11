@@ -8,6 +8,8 @@ weight_in_kg(weight, weight_units = "kg")
 }
 \arguments{
 \item{weight}{Weight value in pounds (lb) or kilograms (kg) (default).}
+
+\item{weight_units}{Unit of weight measurement ('kg' or 'lbs').}
 }
 \value{
 Weight value converted to kilograms (kg).

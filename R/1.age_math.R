@@ -68,10 +68,11 @@ age_in_days <- function(age, age_unit = NULL, dob = NULL, date_assessed = NULL) 
 }
 
 
-#' Convert age in days to age in months (rounded).
-#'
-#' @param age_days Numeric value representing the age in days.
-#'
+#' Convert age to age in months (rounded).
+#' @param age age
+#' @param age_unit (Optional) A character string specifying the unit of the input age ('years', 'months', 'days').
+#' @param dob (Optional) The date of birth as a character string in the format 'YYYY-MM-DD'.
+#' @param date_assessed (Optional) The date of assessment as a character string in the format 'YYYY-MM-DD'.
 #' @return Numeric value representing the age in months (rounded to the nearest month).
 #'
 #' @examples

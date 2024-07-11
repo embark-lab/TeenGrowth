@@ -28,8 +28,6 @@ forecast_bmi(
 \item{upper_margin}{The upper margin for the user-defined forecast.}
 
 \item{central_value}{The central value for the user-defined forecast.}
-
-\item{model}{The model type used for forecasting.}
 }
 \value{
 A full BMI data frame with processed forecasts and cutoffs.

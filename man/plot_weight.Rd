@@ -13,15 +13,15 @@ plot_weight(
 )
 }
 \arguments{
+\item{clean_data}{A data frame containing the clean data.}
+
 \item{forecast_data}{A data frame containing the forecast data.}
 
-\item{px}{The participant ID to filter the data.}
+\item{px}{The participant ID.}
 
-\item{a_height}{Optional parameter to specify the adult height if it is not available in the data.}
+\item{agemos_ed_onset}{The age of onset of the eating disorder.}
 
-\item{model}{The model type used for forecasting.}
-
-\item{ci}{The confidence interval level.}
+\item{a_height}{The adult height of the participant.}
 }
 \value{
 A ggplot object displaying the weight forecast.
