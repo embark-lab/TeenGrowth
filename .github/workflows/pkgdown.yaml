@@ -39,7 +39,7 @@ jobs:
       - name: Install additional dependencies
         run: |
           install.packages("remotes")
-          remotes::install_github("embarklab/EMBARK-tools")  # replace "username" with the actual GitHub username for embarktools
+          remotes::install_github("embark-lab/EMBARK-tools")  # replace "username" with the actual GitHub username for embarktools
 
       - name: Build site
         run: Rscript -e 'pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)'
