@@ -2,9 +2,7 @@
 title: "TeenGrowth Vignette"
 author: "Katherine Schaumberg "
 date: "`r Sys.Date()`"
-output: 
-  rmarkdown::html_vignette:
-        fig_caption: yes
+output: rmarkdown::github_document
 vignette: >
   %\VignetteIndexEntry{TeenGrowth Vignette}
   %\VignetteEngine{knitr::rmarkdown}

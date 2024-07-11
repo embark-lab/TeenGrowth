@@ -35,3 +35,4 @@ VignetteBuilder: knitr
 Remotes:
     embark-lab/EMBARK-tools
 Config/testthat/edition: 3
+URL: https://embark-lab.github.io/TeenGrowth/
