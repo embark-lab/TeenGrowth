@@ -54,7 +54,7 @@
 <div class="page-header"><h1 id="teengrowth">TeenGrowth<a class="anchor" aria-label="anchor" href="#teengrowth"></a>
 </h1></div>
 <div class="section level4">
-<h4 id="a-package-for-wrangling-and-predicting-bmi-related-data-in-adolescent-samples">A package for wrangling and predicting bmi-related data in adolescent samples<a class="anchor" aria-label="anchor" href="#a-package-for-wrangling-and-predicting-bmi-related-data-in-adolescent-samples"></a>
+<h4 id="a-package-for-wrangling-and-predicting-bmi-related-data-in-adolescent-samples">A package for wrangling and predicting BMI-related data in adolescent samples<a class="anchor" aria-label="anchor" href="#a-package-for-wrangling-and-predicting-bmi-related-data-in-adolescent-samples"></a>
 </h4>
 </div>
 <div class="section level4">
@@ -75,7 +75,7 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>To install the `R/scorekeeper` using the `install_github` function: use the following code:</p>
+<p>To install the package using the `install_github` function: use the following code:</p>
 <pre><code><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"embark-lab/embarktools"</span><span class="op">)</span></span>
@@ -99,12 +99,12 @@
 <span></span>
 <span><span class="co"># Plot the results of participant # 1</span></span>
 <span><span class="fu"><a href="reference/Plot_eBMI.html">plot_eBMI</a></span><span class="op">(</span>clean_data <span class="op">=</span> <span class="va">cleaned_data</span>, forecast_data <span class="op">=</span> <span class="va">bmi_forecast</span>, px <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
-<p>For a more detailed outline of how to use the package, refer to the package vignette.</p>
+<p>For a more detailed outline of how to use the R package, refer to the <a href="https://embark-lab.github.io/TeenGrowth/articles/Vignette.html">package vignette</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="shiny-application">Shiny Application<a class="anchor" aria-label="anchor" href="#shiny-application"></a>
 </h2>
-<p>The <code>TeenGrowth</code> package includes a Shiny application to provide an interactive interface for data input, model selection, and weight restoration planning, available at:</p>
+<p>For clinical application, the <code>TeenGrowth</code> package includes a <a href="https://embark-lab.shinyapps.io/teengrowthapp/" class="external-link">Shiny application</a> to provide an interactive interface for data input, model selection, and weight restoration planning.</p>
 <div class="section level3">
 <h3 id="shiny-app-structure">Shiny App Structure<a class="anchor" aria-label="anchor" href="#shiny-app-structure"></a>
 </h3>
