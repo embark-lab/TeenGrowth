@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This vignette provides a detailed walkthrough on how to use the TeenGrowth package to forecast and visualize BMI data. This guide will cover data cleaning, BMI forecasting, and plotting the results.
+This vignette provides a detailed walkthrough on how to use the TeenGrowth package to forecast and visualize BMI data. This guide will cover data cleaning, BMI forecasting, and plotting the results. The TeenGrowth R package is designed for use by eating disorder researchers who have familiarity with R and are interested in forecasting BMI data. For those who are interested in clinical applications of the package through an app, please refer to the [TeenGrowth Shiny app](https://embark-lab.shinyapps.io/teengrowthapp/).
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 library(TeenGrowth)

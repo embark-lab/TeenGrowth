@@ -1,6 +1,6 @@
 # TeenGrowth
 
-#### A package for wrangling and predicting bmi-related data in adolescent samples
+#### A package for wrangling and predicting BMI-related data in adolescent samples
 
 #### by Katherine Schaumberg
 
@@ -18,7 +18,7 @@ The `TeenGrowth` package includes functions for:
 
 ## Installation
 
-To install the \`R/scorekeeper\` using the \`install_github\` function: use the following code:
+To install the package using the \`install_github\` function: use the following code:
 
 ```         
 devtools::install.packages("remotes") 
@@ -48,11 +48,11 @@ bmi_forecast <- forecast_bmi(clean_data)
 plot_eBMI(clean_data = cleaned_data, forecast_data = bmi_forecast, px = 1)
 ```
 
-For a more detailed outline of how to use the package, refer to the package vignette.
+For a more detailed outline of how to use the R package, refer to the [package vignette](https://embark-lab.github.io/TeenGrowth/articles/Vignette.html).
 
 ## Shiny Application
 
-The `TeenGrowth` package includes a Shiny application to provide an interactive interface for data input, model selection, and weight restoration planning, available at:
+For clinical application, the `TeenGrowth` package includes a [Shiny application](https://embark-lab.shinyapps.io/teengrowthapp/) to provide an interactive interface for data input, model selection, and weight restoration planning.
 
 ### Shiny App Structure
 
