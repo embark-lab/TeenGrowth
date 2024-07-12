@@ -99,7 +99,10 @@ units.</p>
 <h3 id="create-bmi-forecasts">Create BMI Forecasts<a class="anchor" aria-label="anchor" href="#create-bmi-forecasts"></a>
 </h3>
 <p>Next, we generate BMI forecasts using the forecast_bmi function. This
-function calculates future BMI values based on the provided data.</p>
+function calculates future BMI values based on the provided data. For
+the following example, we use the mean BMIz prior to eating disorder
+onset as our central value for prediction, with a 95% prediction
+interval.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">BMI_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forecast_bmi.html">forecast_bmi</a></span><span class="op">(</span></span>
 <span>             data <span class="op">=</span> <span class="va">clean_data</span>, </span>
