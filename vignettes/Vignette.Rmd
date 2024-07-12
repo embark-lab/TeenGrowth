@@ -50,7 +50,7 @@ clean_data = clean_data(demo,
 
 ## Create BMI Forecasts
 
-Next, we generate BMI forecasts using the forecast_bmi function. This function calculates future BMI values based on the provided data.
+Next, we generate BMI forecasts using the forecast_bmi function. This function calculates future BMI values based on the provided data. For the following example, we use the mean BMIz prior to eating disorder onset as our central value for prediction, with a 95% prediction interval.
 
 ```{r, warning=FALSE, message=FALSE}
 BMI_forecast <- forecast_bmi(
