@@ -55,7 +55,7 @@ Next, we generate BMI forecasts using the forecast_bmi function. This function c
 ```{r, warning=FALSE, message=FALSE}
 BMI_forecast <- forecast_bmi(
              data = clean_data, 
-             central_value = "mean+most_recent",
+             central_value = "mean",
              ci = 95)
 
 
