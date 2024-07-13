@@ -14,11 +14,9 @@
 age_unit <- function(age) {
   if (is.na(age)) {
     return(NA)
-  } else if (age > 365 * 5) {
+  } else if (age >= 365 * 3) {
     return('days')
-  } else if (age > 52 * 5) {
-    return('weeks')
-  } else if (age > 12 * 3) {
+  } else if (age >= 12 * 3) {
     return('months')
   } else {
     return('years')

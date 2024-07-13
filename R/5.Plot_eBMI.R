@@ -90,12 +90,12 @@ plot_eBMI <- function(clean_data,
     coord_cartesian(ylim = c(12, 30)) +
     embarktools::embark_theme_a +
     # label the stat_smooth orange line
-    annotate("text", x = 48, y = 22, label = "Median BMI", color = embarktools::embark_colors[1],
+    annotate("text", x = 48, y = 16, label = "Median BMI", color = embarktools::embark_colors[1],
              # make the text slanted
-             angle = -45) +
+             angle = -10) +
     # label the stat_smooth red line
-    annotate("text", x = 54, y = 16.5, label = "Underweight BMI", color = embarktools::embark_colors[6],
-             angle = -40) +
+    annotate("text", x = 54, y = 13.5, label = "Underweight BMI", color = embarktools::embark_colors[6],
+             angle = -10) +
     # Add graph title
     ggtitle("Expected BMI across Age") +
     # add in some grid lines
