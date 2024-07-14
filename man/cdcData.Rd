@@ -5,7 +5,7 @@
 \alias{cdcData}
 \title{CDC Growth Data}
 \format{
-An object of class \code{data.frame} with 438 rows and 15 columns.
+An object of class \code{data.frame} with 438 rows and 35 columns.
 }
 \usage{
 data(cdcData)

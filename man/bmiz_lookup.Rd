@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.bmiz_to_bmi.R
 \name{bmiz_lookup}
 \alias{bmiz_lookup}
-\title{BMIz Lookup}
+\title{Lookup BMI Z-Score}
 \usage{
 bmiz_lookup(
   bmi,
@@ -15,23 +15,23 @@ bmiz_lookup(
 )
 }
 \arguments{
-\item{bmi}{'bmi score'}
+\item{bmi}{BMI value.}
 
-\item{sex}{'1 = Male, 2 = Female'}
+\item{sex}{Sex of the individual (1 for male, 2 for female).}
 
-\item{age}{'age'}
+\item{age}{Age of the individual.}
 
-\item{data_source}{Data source ('cdc' or 'wgsr')}
+\item{data_source}{Data source ('cdc' or 'wgsr').}
 
-\item{age_unit}{'unit of age - optional'}
+\item{age_unit}{Unit of age ('months', 'years', etc.).}
 
-\item{dob}{'date of birth'}
+\item{dob}{Date of birth (optional).}
 
-\item{date_assessed}{'date of assessment'}
+\item{date_assessed}{Date of assessment (optional).}
 }
 \value{
-bmiz scores based on bmi and age
+Z-score corresponding to the given BMI.
 }
 \description{
-BMIz Lookup
+Lookup BMI Z-Score
 }

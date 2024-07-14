@@ -2,22 +2,26 @@
 % Please edit documentation in R/0.bmiz_to_bmi.R
 \name{bmi_to_bmiz}
 \alias{bmi_to_bmiz}
-\title{Converts bmi to bmiz scores based on either cdc or WGSR lookup data}
+\title{Convert BMI to Z-Score}
 \usage{
-bmi_to_bmiz(l, m, s, bmi)
+bmi_to_bmiz(l, m, s, bmi, sigma = NULL, p95 = NULL)
 }
 \arguments{
-\item{l}{matching l parameter from CDC or WGSR data}
+\item{l}{L parameter from the LMS table.}
 
-\item{m}{from CDC or WGSR data}
+\item{m}{M parameter from the LMS table.}
 
-\item{s}{from CDC or WGSR data}
+\item{s}{S parameter from the LMS table.}
 
-\item{bmi}{bmi score from original data}
+\item{bmi}{BMI value.}
+
+\item{sigma}{Standard deviation (optional).}
+
+\item{p95}{95th percentile BMI value (optional).}
 }
 \value{
-a bmiz
+Z-score corresponding to the given BMI.
 }
 \description{
-Converts bmi to bmiz scores based on either cdc or WGSR lookup data
+Convert BMI to Z-Score
 }

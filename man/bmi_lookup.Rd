@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.bmiz_to_bmi.R
 \name{bmi_lookup}
 \alias{bmi_lookup}
-\title{BMI Lookup}
+\title{Lookup BMI}
 \usage{
 bmi_lookup(
   data_point,
@@ -16,25 +16,25 @@ bmi_lookup(
 )
 }
 \arguments{
-\item{data_point}{'bmiz score or bmi percentile'}
+\item{data_point}{Data point (BMI Z-score or percentile).}
 
-\item{type}{'bmiz' or 'pct'}
+\item{type}{Type of data point ('bmiz' or 'pct').}
 
-\item{data_source}{Data source ('cdc' or 'wgsr')}
+\item{data_source}{Data source ('cdc' or 'wgsr').}
 
-\item{sex}{'1 = Male, 2 = Female'}
+\item{sex}{Sex of the individual (1 for male, 2 for female).}
 
-\item{age}{'age'}
+\item{age}{Age of the individual.}
 
-\item{age_unit}{'unit of age - optional'}
+\item{age_unit}{Unit of age ('months', 'years', etc.).}
 
-\item{dob}{'date of birth'}
+\item{dob}{Date of birth (optional).}
 
-\item{date_assessed}{'date of assessment}
+\item{date_assessed}{Date of assessment (optional).}
 }
 \value{
-bmi scores based on bmiz and age
+BMI value corresponding to the given data point.
 }
 \description{
-BMI Lookup
+Lookup BMI
 }
