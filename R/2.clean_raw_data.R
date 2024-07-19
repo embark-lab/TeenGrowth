@@ -74,6 +74,10 @@ clean_data <- function(data,
   # make an age column that is in years
   data$age_years <- data$agemos / 12
 
+  # remove data before 24 months
+  data <- data %>%
+    filter(agemos > 24)
+
 # create sex column and align
 # if sex column is null - assign all sex to female and make a note of this
 if (is.null(sex_col_name)) {
@@ -165,13 +169,13 @@ if (!is.null(bmi_col_name)) {
   else if (!is.null(bmiz_col_name)) {
   # vectorize the bmi_lookup function
   vectorized_bmi_lookup <- Vectorize(bmi_lookup, vectorize.args = c("data_point", "age", "sex"))
-  data$bmi <- vectorized_bmi_lookup(data_point = data[[bmiz_col_name]], age = data$agemos, sex = data$sex, type = 'bmiz', data_source = data_source)
+  data$bmi <- vectorized_bmi_lookup(data_point = data[[bmiz_col_name]], age = data$agemos, sex = data$sex, type = 'bmiz', data_source = data_source, age_unit = 'months')
 }
   else if (!is.null(pct_col_name)) {
   # vectorize the bmi_lookup function
   vectorized_bmi_lookup <- Vectorize(bmi_lookup, vectorize.args = c("data_point", "age", "sex"))
   data$bmi <- vectorized_bmi_lookup(data_point = data[[pct_col_name]], age = data$agemos, sex =
-          data$sex, type = 'pct', data_source = data_source)
+          data$sex, type = 'pct', data_source = data_source, age_unit = 'months')
   }
   else {
     # stop and return message that bmi, bmiz, height and weight, or pct columns are required
@@ -185,7 +189,7 @@ if (!is.null(bmi_col_name)) {
 }
   else {
   vectorized_bmiz_lookup <- Vectorize(bmiz_lookup, vectorize.args = c("bmi", "age", "sex"))
-  data$bmiz <- vectorized_bmiz_lookup(bmi = data$bmi, age = data$agemos, sex = data$sex, data_source = data_source)
+  data$bmiz <- vectorized_bmiz_lookup(bmi = data$bmi, age = data$agemos, sex = data$sex, data_source = data_source, age_unit= 'months')
   }
 
 # Convert ed_aao to months if ed_aao_col_name is provided
@@ -286,11 +290,6 @@ data <- data %>%
   ungroup()
 message("Height values were missing and have been interpolated using a window of 9 months.")
 }
-
-# remove data before 24 months
-data <- data %>%
-  filter(agemos >= 24)
-
 
 # Handle duplicate rows by averaging numeric columns
 data <- data %>%

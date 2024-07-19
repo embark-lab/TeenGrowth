@@ -140,14 +140,15 @@ bmi_lookup <- function(data_point, type = 'bmiz', data_source = 'cdc', sex = 2, 
 
 
 # Function to lookup BMIz
-bmiz_lookup <- function(bmi, sex = 2, age, data_source = 'cdc', age_unit = NULL, dob = NULL, date_assessed = NULL) {
+bmiz_lookup <- function(bmi, sex = 2, age, data_source = 'cdc', age_unit = 'months', dob = NULL, date_assessed = NULL) {
   # Skip if bmi, sex, or age are missing
   if (is.na(bmi) || is.na(sex) || is.na(age)) {
     return(NA)
   }
 
   if (data_source == 'cdc') {
-    age_mos <- age_in_months(age_in_days(age = as.numeric(age), age_unit = age_unit, dob = dob, date_assessed = date_assessed))
+  if (age_unit != 'months') { age_mos <- age_in_months(age_in_days(age = as.numeric(age), age_unit = age_unit, dob = dob, date_assessed = date_assessed)) }
+    else { age_mos <- as.numeric(age) }
     age_mos <- ifelse(age_mos >= 0 & age_mos < 0.5, 0, as.integer(age_mos + 0.5) - 0.5)
     max_age_cdc <- max(cdcData$agemos)
     if (age_mos > max_age_cdc) {
