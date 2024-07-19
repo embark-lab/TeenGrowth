@@ -73,8 +73,8 @@ tx_plot_clean <- function(filtered_data,
   if (is.null(dob)) stop("Date of birth is required. Please provide a date of birth")
   if (is.null(tx_start_date)) stop("Treatment start date is required. Please provide a treatment start date")
 
-  dob <- ymd(dob)
-  tx_start_date <- ymd(tx_start_date)
+  dob <- lubridate::ymd(dob)
+  tx_start_date <- lubridate::ymd(tx_start_date)
 
   tx_start_age_days <- as.numeric(difftime(tx_start_date, dob, units = "days"))
 
@@ -98,16 +98,15 @@ tx_plot_clean <- function(filtered_data,
 
   if (!is.null(age_col_name)) {
     dynamic_data <- dynamic_data %>%
-      mutate(age_days = vectorized_age_in_days(!!sym(age_col_name), age_unit = age_unit, dob = dob))
+      mutate(age_days = vectorized_age_in_days(!!sym(age_col_name), age_unit = age_unit, dob = dob)) |>
+      mutate(date_assessed = dob + days(as.integer(age_days)))
   }
 
   if (!is.null(date_assessed_col_name)) {
     dynamic_data <- dynamic_data %>%
-      mutate(date_assessed = ymd(!!sym(date_assessed_col_name)),
-             age_days = vectorized_age_in_days(dob = dob, date_assessed = ymd(!!sym(date_assessed_col_name))))
-  } else if (!is.null(age_col_name)) {
-    dynamic_data <- dynamic_data %>%
-      mutate(date_assessed = dob + days(as.integer(age_days)))
+      mutate(date_assessed = lubridate::ymd(!!sym(date_assessed_col_name)),
+             age_days = vectorized_age_in_days(dob = dob, date_assessed = lubridate::ymd(!!sym(date_assessed_col_name))))
+
   }
 
   if (!is.null(ht_col_name)) {

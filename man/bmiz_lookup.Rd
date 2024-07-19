@@ -9,7 +9,7 @@ bmiz_lookup(
   sex = 2,
   age,
   data_source = "cdc",
-  age_unit = NULL,
+  age_unit = "months",
   dob = NULL,
   date_assessed = NULL
 )

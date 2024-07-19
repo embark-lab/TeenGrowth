@@ -41,9 +41,11 @@ age_unit <- function(age) {
 #'
 #' @export
 
-age_in_days <- function(age, age_unit = NULL, dob = NULL, date_assessed = NULL) {
+age_in_days <- function(age = NULL, age_unit = NULL, dob = NULL, date_assessed = NULL) {
   if (!is.null(dob) & !is.null(date_assessed)) {
     age_unit <- 'dates'
+    return(as.numeric(difftime(date_assessed, dob, units = 'days')))
+
   } else if (is.null(age_unit)) {
     age_unit <- age_unit(age)
   }
@@ -58,8 +60,6 @@ age_in_days <- function(age, age_unit = NULL, dob = NULL, date_assessed = NULL) 
     return(age * 7)
   } else if (age_unit == 'days') {
     return(age)
-  } else if (age_unit == 'dates') {
-    return(as.numeric(difftime(date_assessed, dob, units = 'days')))
   } else {
     return(NA)
   }

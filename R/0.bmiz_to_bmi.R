@@ -16,6 +16,7 @@ pct_to_bmiz <- function(pct) {
 #' @param bmiz BMI Z-score.
 #' @param sigma Standard deviation (optional).
 #' @param p95 95th percentile BMI value (optional).
+#' @importFrom stats pnorm
 #' @return BMI corresponding to the given Z-score.
 #' @export
 bmiz_to_bmi <- function(l, m, s, bmiz, sigma = NULL, p95 = NULL) {
@@ -44,6 +45,7 @@ bmiz_to_bmi <- function(l, m, s, bmiz, sigma = NULL, p95 = NULL) {
 #' @param bmi BMI value.
 #' @param sigma Standard deviation (optional).
 #' @param p95 95th percentile BMI value (optional).
+#' @importFrom stats pnorm
 #' @return Z-score corresponding to the given BMI.
 #' @export
 bmi_to_bmiz <- function(l, m, s, bmi, sigma = NULL, p95 = NULL) {
