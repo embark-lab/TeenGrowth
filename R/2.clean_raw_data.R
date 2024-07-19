@@ -51,6 +51,7 @@ clean_data <- function(data,
                            ed_aoo_col_name = NULL) {
 
   # if age is specified in years, provide message that it is highly recommended that age be specified to at least one decimal place
+  age_unit_date <- NULL
   if (!is.null(age_unit) && age_unit == 'years') {
     message("Ages have been provided in years in the current data. It is highly recommended that age in years be specified to at least one decimal place for accurate forecasting.")
   }
