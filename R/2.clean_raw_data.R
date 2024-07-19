@@ -67,10 +67,11 @@ clean_data <- function(data,
     stop('age column is required') }
   if (!is.null(dob_col_name) & !is.null(date_assessed_col_name)) {
     data$age_days <- as.numeric(difftime(data[[date_assessed_col_name]], data[[dob_col_name]], units = 'days'))
-    age_col_name <- 'age_days' }
+    age_col_name <- 'age_days'
+    age_unit_date <- 'days'}
   # Convert age column to months
   data <- data %>%
-    mutate(agemos = vectorized_age_in_months(!!sym(age_col_name), age_unit = age_unit))
+    mutate(agemos = vectorized_age_in_months(!!sym(age_col_name), age_unit = ifelse(!is.null(age_unit_date), age_unit_date, age_unit)))
   # make an age column that is in years
   data$age_years <- data$agemos / 12
 
