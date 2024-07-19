@@ -51,7 +51,11 @@ clean_data <- function(data,
                            ed_aoo_col_name = NULL) {
 
   # if age is specified in years, provide message that it is highly recommended that age be specified to at least one decimal place
-  age_unit_date <- NULL
+  if (!is.null(dob_col_name) & !is.null(date_assessed_col_name)) {
+    age_is_date <- TRUE
+  } else {
+    age_is_date <- FALSE
+  }
   if (!is.null(age_unit) && age_unit == 'years') {
     message("Ages have been provided in years in the current data. It is highly recommended that age in years be specified to at least one decimal place for accurate forecasting.")
   }
@@ -66,13 +70,18 @@ clean_data <- function(data,
   # if age column is NULL, create a new age column
   if (is.null(age_col_name) & is.null(dob_col_name) & is.null(date_assessed_col_name)) {
     stop('age column is required') }
+
   if (!is.null(dob_col_name) & !is.null(date_assessed_col_name)) {
     data$age_days <- as.numeric(difftime(data[[date_assessed_col_name]], data[[dob_col_name]], units = 'days'))
-    age_col_name <- 'age_days'
-    age_unit_date <- 'days'}
-  # Convert age column to months
+    age_col_name <- 'age_days'}
+
+if (age_is_date == FALSE) {
+    # Convert age column to months
   data <- data %>%
-    mutate(agemos = vectorized_age_in_months(!!sym(age_col_name), age_unit = ifelse(!is.null(age_unit_date), age_unit_date, age_unit)))
+    mutate(agemos = vectorized_age_in_months(!!sym(age_col_name), age_unit = age_unit)) }
+else {
+  data <- data %>%
+    mutate(agemos = vectorized_age_in_months(!!sym(age_col_name), age_unit = 'days')) }
   # make an age column that is in years
   data$age_years <- data$agemos / 12
 
