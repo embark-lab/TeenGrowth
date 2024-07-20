@@ -10,10 +10,19 @@
 #'
 
 make_bmiz_tsibble <- function(data) {
-  ts_data <- data |>
-    dplyr::select(agemos, bmiz, id)
-  ts_data <- ts_data |>
-    tsibble::as_tsibble(index = agemos, key = id) |>
+  ts_data <- data %>%
+    dplyr::select(agemos, bmiz, id) %>%
+    tsibble::as_tsibble(index = agemos, key = id)
+
+  if (nrow(ts_data) == 2) {
+    ts_data <- ts_data %>%
+      as_tibble() %>%
+      tidyr::complete(agemos = full_seq(agemos, 1), id = unique(id), fill = list(bmiz = NA)) %>%
+      tsibble::as_tsibble(index = agemos, key = id)
+  }
+
+
+  ts_data <- ts_data %>%
     tsibble::fill_gaps()
 
   return(ts_data)
