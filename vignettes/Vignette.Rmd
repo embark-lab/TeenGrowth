@@ -57,8 +57,6 @@ BMI_forecast <- forecast_bmi(
              data = clean_data, 
              central_value = "mean",
              ci = 95)
-
-
 ```
 
 ## Plot Data

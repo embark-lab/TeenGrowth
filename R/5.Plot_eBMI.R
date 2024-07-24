@@ -62,6 +62,12 @@ plot_eBMI <- function(clean_data,
     # get the bmi associated with the age closest to the midpoint of the prediction interval
     pull(upper_eBMI)
 
+  # Calculate the maximum value of upper_eBMI
+  max_upper_eBMI <- max(data_2$upper_eBMI, na.rm = TRUE)
+
+  # Set the ylim conditionally
+  ylim_values <- if (max_upper_eBMI > 30) c(12, max_upper_eBMI) else c(12, 30)
+
   p <- ggplot2::ggplot(data = data_2, mapping = aes(x = age, y = eBMI)) +
     geom_point(mapping = aes(agemos, bmi), data = pre_ed,
                stat = 'identity', position = 'identity',
@@ -87,14 +93,14 @@ plot_eBMI <- function(clean_data,
     stat_smooth(mapping = aes(x = agemos, y = UW_cutoff_bmi), data = forecast_data, col = embarktools::embark_colors[6], linetype = 'dotted', position = 'identity' )+
     xlab('Age') +
     ylab('Body Mass Index') +
-    coord_cartesian(ylim = c(12, 30)) +
+    coord_cartesian(ylim = ylim_values) +
     embarktools::embark_theme_a +
     # label the stat_smooth orange line
-    annotate("text", x = 48, y = 16, label = "Median BMI", color = embarktools::embark_colors[1],
+    annotate("text", x = 36, y = 17, label = "Median BMI", color = embarktools::embark_colors[1],
              # make the text slanted
              angle = -10) +
     # label the stat_smooth red line
-    annotate("text", x = 54, y = 13.5, label = "Underweight BMI", color = embarktools::embark_colors[6],
+    annotate("text", x = 40, y = 13.5, label = "Underweight BMI", color = embarktools::embark_colors[6],
              angle = -10) +
     # Add graph title
     ggtitle("Expected BMI across Age") +
