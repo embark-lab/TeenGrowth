@@ -109,10 +109,10 @@ fit_and_forecast_bmiz <- function(ts_data,
       select(id, .model, agemos, eBMIz, lower_eBMIz, upper_eBMIz)
   }
 
-  if (central_value == "mean" && (ci == 95 || ci == 99)) {
+  if (central_value == "mean" && (ci == 95 || ci == 99 || ci == 80)) {
     bmiz_fit <- fit_forecast(ts_data, "mean", MEAN(bmiz), ci)
 
-  } else if (central_value == "most_recent" && (ci == 95 || ci == 99)) {
+  } else if (central_value == "most_recent" && (ci == 95 || ci == 99 || ci == 80)) {
     bmiz_fit <- fit_forecast(ts_data, "most_recent", MEAN(bmiz), ci)
 
     most_recent_bmiz <- ts_data %>%
@@ -133,7 +133,7 @@ fit_and_forecast_bmiz <- function(ts_data,
       # recode the model name to be 'most_recent' if it is coded as 'mean'
       mutate(.model = if_else(.model == "mean", "most_recent", .model))
 
-  } else if (central_value == "mean+most_recent" && (ci == 95 || ci == 99)) {
+  } else if (central_value == "mean+most_recent" && (ci == 95 || ci == 99 || ci == 80)) {
     bmiz_fit <- fit_forecast(ts_data, "mean+most_recent", MEAN(bmiz), ci)
 
     most_recent_bmiz <- ts_data %>%
@@ -162,7 +162,7 @@ fit_and_forecast_bmiz <- function(ts_data,
       select(id, .model, agemos, eBMIz, lower_eBMIz, upper_eBMIz)
 
 
-  } else if (central_value == "max" && (ci == 95 || ci == 99)) {
+  } else if (central_value == "max" && (ci == 95 || ci == 99 || ci == 80)) {
     bmiz_fit <- fit_forecast(ts_data, "max", MEAN(bmiz), ci)
 
     max_bmiz <- ts_data %>%
