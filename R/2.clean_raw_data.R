@@ -101,7 +101,7 @@ data <- data |>
   mutate(sex = align_sex_coding(sex)[[sex_col_name]])
 
 
-# manage the adult_height column. if adult height column is provided, use this column and rename it 'adult_height' -- if it is not provided and ht_col_name is provided, make adult height = the most recent height measurement (oldest age) IF the age is > 14 years for females (sex == 2) or 16 years for males (sex ==1)
+# manage the adult_height column. if adult height column is provided, use this column and rename it 'adult_height' -- if it is not provided and ht_col_name is provided, make adult height = the most recent height measurement (oldest age) If the age is > 15 years for females (sex == 2) or 17 years for males (sex ==1)
 # Handle adult height column
 
 if (!is.null(adult_ht_col_name)) {
@@ -117,7 +117,7 @@ if (!is.null(adult_ht_col_name)) {
     group_by(id) %>%
     arrange(desc(agemos)) %>%
     mutate(adult_height = ifelse(
-      (sex == 2 & ((agemos / 12) >= 14)) | (sex == 1 & ((agemos / 12) >= 16)),
+      (sex == 2 & ((agemos / 12) >= 15)) | (sex == 1 & ((agemos / 12) >= 17)),
       !!sym(ht_col_name),
       NA_real_
     )) %>%
@@ -130,7 +130,7 @@ if (!is.null(adult_ht_col_name)) {
   # make an adult height in inches column for show - convert adult height to inches
   data$adult_height_in <- data$adult_height_cm / 2.54
 
-  message("Adult height was not provided but height is-- Adult height has been set to the oldest height obtained after age 14 for girls and after age 16 for boys.")
+  message("Adult height was not provided but height is-- Adult height has been set to the oldest height obtained after age 15 for girls and after age 17 for boys.")
 
 }
 else {
@@ -221,11 +221,11 @@ if (!is.null(age_adult_ht_col_name)) {
     filter((abs(height_cm - adult_height_cm)) <= 2) %>%
     summarise(agemos_adult_ht = min(agemos, na.rm = TRUE)) %>%
     right_join(data, by = "id")
-  # if age at adult height is NA and the oldest age for girls is < 14, set age at adult height to 14
+  # if age at adult height is NA and the oldest age for girls is < 15, set age at adult height to 15
 data_youngs <- data |>
   group_by(id) |>
-  filter(ifelse (sex == 2, max(agemos) < 168, max(agemos) < 192)) |>
-  mutate(agemos_adult_ht = ifelse(sex == 2, 168, 192)) |>
+  filter(ifelse (sex == 2, max(agemos) < 15*12, max(agemos) < 17*12)) |>
+  mutate(agemos_adult_ht = ifelse(sex == 2, 15*12, 17*12)) |>
   ungroup()
 
 # replace the age at adult height in the original data with the new age at adult height for the youngs
@@ -233,7 +233,7 @@ data <- data |>
   anti_join(data_youngs, by = "id") |>
   bind_rows(data_youngs)
 
-  message ("Adult height was provided but age at which this height was reached is not provided. For girls with a height recording after 14 years old and boys with a height recording after 16 years old, age at adult height has been set to the age at which the height is first within 2 cm of adult height. For girls with no height recorded after age 14 and boys with no height recorded after age 16, age at adult height has been set to age 14 (168 months) for girls and age 16 (192 months) for boys. If this is not accurate, please provide the age at adult height in the dataset.")
+  message ("Adult height was provided but age at which this height was reached is not provided. For girls with a height recording after 15 years old and boys with a height recording after 17 years old, age at adult height has been set to the age at which the height is first within 2 cm of adult height. For girls with no height recorded after age 15 and boys with no height recorded after age 17, age at adult height has been set to age 15 for girls and age 17 for boys. If this is not accurate, please provide the age at adult height in the dataset.")
 
 } else if (!is.null(ht_col_name)) {
   data <- data %>%
@@ -241,7 +241,7 @@ data <- data |>
     filter((abs(height_cm - adult_height_cm)) <= 2) %>%
     summarise(agemos_adult_ht = min(agemos, na.rm = TRUE)) %>%
     right_join(data, by = "id")
- message("No age at adult height column was provided, but height was provided. Age at adult height has been set to the age at which height is first within 2 cm of adult height (Height at oldest age where height was recorded after age 14 for girls at 16 for boys). If this is not accurate, please provide the age at adult height in the dataset.")
+ message("No age at adult height column was provided, but height was provided. Age at adult height has been set to the age at which height is first within 2 cm of adult height (Height at oldest age where height was recorded after age 15 for girls at 17 for boys). If this is not accurate, please provide the age at adult height in the dataset.")
 } else {
   data$agemos_adult_ht <- NA_real_
   message("No age at adult height column was provided, nor was height provided. Age at adult height has been set to NA -- you may add this information later for plotting individuals")
