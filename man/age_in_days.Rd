@@ -4,7 +4,7 @@
 \alias{age_in_days}
 \title{Convert age from various units to days.}
 \usage{
-age_in_days(age, age_unit = NULL, dob = NULL, date_assessed = NULL)
+age_in_days(age = NULL, age_unit = NULL, dob = NULL, date_assessed = NULL)
 }
 \arguments{
 \item{age}{Numeric value representing the age.}

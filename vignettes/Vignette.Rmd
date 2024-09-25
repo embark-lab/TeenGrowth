@@ -95,7 +95,7 @@ Finally, we provide an example of how to use the package for treatment planning.
 ```{r, warning=FALSE, message=FALSE}
 
 wt_restore <- demo |> filter(participant == 2)
-wt_restore_clean <-     pct_plot_clean(wt_restore,
+wt_restore_clean <-     tx_plot_clean(wt_restore,
                         age_col_name = 'age',
                         age_unit = 'years',
                         ht_col_name = 'height',
