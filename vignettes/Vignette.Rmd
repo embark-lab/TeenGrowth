@@ -95,12 +95,13 @@ Finally, we provide an example of how to use the package for treatment planning.
 ```{r, warning=FALSE, message=FALSE}
 
 wt_restore <- demo |> filter(participant == 2)
-wt_restore_clean <-     tx_plot_clean(wt_restore,
+wt_restore_clean <-     pct_plot_clean(wt_restore,
                         age_col_name = 'age',
                         age_unit = 'years',
                         ht_col_name = 'height',
                         wt_col_name = 'weight',
                         adult_ht = wt_restore$adult_height_in[1],
+                        sex = wt_restore$sex[1],
                         ht_unit = 'in', 
                         wt_unit = 'lb', 
                         dob = '2009-01-01', 
