@@ -5,6 +5,7 @@
 <url><loc>https://embark-lab.github.io/TeenGrowth/articles/index.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/authors.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/index.html</loc></url>
+<url><loc>https://embark-lab.github.io/TeenGrowth/reference/Pct_Restore_Plot.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/Plot_eBMI.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/Wt_Restore_Plot.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/add_bmi.html</loc></url>
@@ -37,6 +38,7 @@
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/m2y.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/make_bmiz_forecast.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/make_bmiz_tsibble.html</loc></url>
+<url><loc>https://embark-lab.github.io/TeenGrowth/reference/pct_plot_clean.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/pct_to_bmiz.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/plot_weight.html</loc></url>
 <url><loc>https://embark-lab.github.io/TeenGrowth/reference/solve_for_weight.html</loc></url>
