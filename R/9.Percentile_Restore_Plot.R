@@ -13,13 +13,31 @@
 #' @export
 
 Pct_Restore_Plot <- function(clean_data, forecast_data) {
+  # Check if required data is present
+  stopifnot(!is.null(clean_data), !is.null(forecast_data))
 
+  # Extract static data
   start_date <- clean_data$static_data$tx_start_date
   dob <- clean_data$static_data$dob
   prediction_ht_in <- clean_data$static_data$prediction_ht_in
-  x_start <- start_date - lubridate::days(30)
-  x_end <- Sys.Date() + lubridate::days(30)
 
+  # Check if dates are in Date format
+  if (!inherits(start_date, "Date") || !inherits(dob, "Date")) {
+    stop("start_date and dob must be Date objects")
+  }
+
+  # Define plotting range
+  x_start <- start_date - lubridate::days(30)
+  x_end <- Sys.Date() + lubridate::days(60)
+
+  # Ensure forecast_data has necessary columns
+  required_cols <- c("eBMIz", "lower_eBMIz", "upper_eBMIz", "agemos")
+  missing_cols <- setdiff(required_cols, colnames(forecast_data))
+  if (length(missing_cols) > 0) {
+    stop("forecast_data is missing columns: ", paste(missing_cols, collapse = ", "))
+  }
+
+  # Prepare forecast_data
   forecast_data <- forecast_data %>%
     mutate(
       ePct = pnorm(eBMIz) * 100,
@@ -29,44 +47,89 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
     ) %>%
     mutate(age_days = as.numeric(date_assessed - dob))
 
+  # Debug: Check forecast_data after mutation
+  cat("Forecast data after processing:\n")
+  print(head(forecast_data))
+
+  # Calculate mean percentiles
   ePct <- mean(forecast_data$ePct, na.rm = TRUE)
   lower_ePct <- mean(forecast_data$lower_ePCT, na.rm = TRUE)
   upper_ePct <- mean(forecast_data$upper_ePCT, na.rm = TRUE)
 
+  # Check for NA values in percentiles
+  if (is.na(ePct) || is.na(lower_ePct) || is.na(upper_ePct)) {
+    stop("Percentile calculations resulted in NA values. Check forecast_data for missing or invalid values.")
+  }
+
+  # Calculate starting BMI
   start_bmi <- calculate_bmi(
     weight = clean_data$static_data$intake_wt_kgs,
     height = clean_data$static_data$adult_ht_in * 2.54
   )
 
+  # Debug: Output start_bmi
+  cat("Start BMI:", start_bmi, "\n")
+
+  # Calculate intake age in days
   intake_age <- as.numeric(clean_data$static_data$tx_start_date - clean_data$static_data$dob)
 
+  # Check if intake_age is positive
+  if (intake_age <= 0) {
+    stop("intake_age is not positive. Check tx_start_date and dob.")
+  }
+
+  # Calculate intake percentile
   intake_pct <- pnorm(bmiz_lookup(
     bmi = start_bmi,
-    sex = align_sex_coding(clean_data$static_data$sex)$sex,
+    sex = clean_data$static_data$sex,
     age_unit = 'days',
     age = intake_age
   )) * 100
 
+  # Debug: Output intake_pct
+  cat("Intake BMI percentile:", intake_pct, "\n")
+
   # Calculate percentile data for all dynamic data
-  vectorized_bmiz_lookup <- Vectorize(bmiz_lookup, vectorize.args = c("bmi", "age"))
+  vectorized_bmiz_lookup <- function(bmi, sex, age, data_source = 'cdc', age_unit = NULL, dob = NULL, date_assessed = NULL) {
+    mapply(bmiz_lookup, bmi = bmi, sex = sex, age = age, MoreArgs = list(data_source = data_source, age_unit = age_unit, dob = dob, date_assessed = date_assessed))
+  }
+  # Create a vector of sex values
+  sex_vector <- rep(1, nrow(clean_data$dynamic_data))
 
   dynamic_data <- clean_data$dynamic_data %>%
-    mutate(bmi = calculate_bmi(weight = weight_kgs, height = height_cm)) %>%
-    mutate(pct = pnorm(vectorized_bmiz_lookup(
-      bmi = bmi,
-      sex = align_sex_coding(clean_data$static_data$sex)$sex,
-      age_unit = 'days',
-      age = age_days
-    )) * 100)
+    mutate(
+      bmi = calculate_bmi(weight = weight_kgs, height = height_cm),
+      pct = pnorm(vectorized_bmiz_lookup(
+        bmi = bmi,
+        sex = sex_vector,
+        age_unit = 'days',
+        age = age_days
+      )) * 100
+    )
 
+  # Debug: Check dynamic_data after mutation
+  cat("Dynamic data after adding bmi and pct:\n")
+  print(tail(dynamic_data))
+
+  # Filter data for plotting
   dynamic_data <- dynamic_data %>%
     filter(age_days >= clean_data$static_data$tx_start_age_days)
 
+  # Check if dynamic_data is not empty after filtering
+  if (nrow(dynamic_data) == 0) {
+    stop("No data available after filtering. Check tx_start_age_days and dynamic_data.")
+  }
+
+  # Get start and current percentiles and dates
   start_pct <- dynamic_data$pct[1]
   current_pct <- dynamic_data$pct[nrow(dynamic_data)]
   current_date <- dynamic_data$date_assessed[nrow(dynamic_data)]
 
-  # Create a dataframe with just x_start and x_end
+  # Debug: Output start and current percentiles
+  cat("Start percentile:", start_pct, "\n")
+  cat("Current percentile:", current_pct, "\n")
+
+  # Create ribbon data for plotting
   ribbon_data <- data.frame(
     date_assessed = c(x_start, x_end),
     lower_ePct = c(lower_ePct, lower_ePct),
@@ -102,6 +165,11 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
   start_pct_suffix <- ordinal_suffix(start_pct_rounded)
   current_pct_suffix <- ordinal_suffix(current_pct_rounded)
 
+  # Debug: Output rounded percentiles with suffixes
+  cat("Predicted BMI Percentile:", ePct_rounded, ePct_suffix, "\n")
+  cat("Intake Percentile:", start_pct_rounded, start_pct_suffix, "\n")
+  cat("Current Percentile:", current_pct_rounded, current_pct_suffix, "\n")
+
   ggplot(dynamic_data, mapping = aes(x = date_assessed)) +
     geom_point(
       data = dynamic_data,
@@ -111,7 +179,14 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       size = 4,
       shape = 21
     ) +
-
+    geom_smooth(
+      data = dynamic_data,
+      mapping = aes(x = date_assessed, y = pct),
+      col = embarktools::embark_colors[1],
+      size = 1,
+      linetype = 'dotted',
+      se = FALSE
+    ) +
     # Ribbons representing percentile ranges
     geom_ribbon(
       data = ribbon_data,
@@ -179,7 +254,7 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       x = x_end,
       y = upper_ePct,
       label = paste0(
-        "Predicted \n BMI Percentile: ",
+        "Predicted BMI Percentile: ",
         ePct_rounded, ePct_suffix, " \n",
         "Range: ",
         lower_ePct_rounded, lower_ePct_suffix, " - ",
