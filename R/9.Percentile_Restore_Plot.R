@@ -104,15 +104,17 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       scale_x_date(limits = c(x_start, x_end), date_labels = "%b %Y") +
       annotate("text", x = start_date, y = upper_ePct, label = paste("Tx Start Date\n", format(start_date, "%b %d, %Y")),
       vjust = 0.5, angle = 90, color = embarktools::embark_colors[1], size = 4, hjust = 1) +
-      annotate("text", x = x_end, y = ePct, label = paste0("Predicted \n BMI Percentile: ", round(ePct, 0),"th \n", "Range: ", round(lower_ePct, 0), "th - ", round(upper_ePct, 0), "th"),
-               vjust = 0.5, angle = 0, color = embarktools::embark_colors[1], size = 4, hjust = 1) +
+      annotate("text", x = x_end, y = upper_ePct, label = paste0("Predicted \n BMI Percentile: ", round(ePct, 0),"th \n", "Range: ", round(lower_ePct, 0), "th - ", round(upper_ePct, 0), "th"),
+               vjust = 1, angle = 0, color = embarktools::embark_colors[1], size = 4, hjust = 1) +
      annotate ("text", x = start_date, y = start_pct, label = paste0("Intake:\n", round(start_pct, 0),"th"),
                 vjust = -1, hjust = 0.5, color = embarktools::embark_colors[1], size = 3) +
    labs(title = "BMI Percentile Restoration", x = "", y = "BMI Percentile") +
       annotate("text", x = current_date, y = current_pct, label = paste0("Current:\n ", round(current_pct, 0),"th"),
                vjust = -1, hjust = 0.5,  color = embarktools::embark_colors[1], size = 3, hjust = 1) +
-
-
+    geom_hline(mapping = aes(x = date_assessed, yintercept = ePct),
+    col = embarktools::embark_colors[1], size = 0.5, linetype = 'dotted') +
+    geom_hline(mapping = aes(x = date_assessed, yintercept = lower_ePct),
+    col = embarktools::embark_colors[1], size = 0.5, linetype = 'dotted') +
    embarktools::embark_theme_a +
   theme(axis.text.x = element_text(angle = 35, size = 14, hjust = 1))
 
