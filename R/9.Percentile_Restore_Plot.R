@@ -81,7 +81,7 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
   # Calculate intake percentile
   intake_pct <- pnorm(bmiz_lookup(
     bmi = start_bmi,
-    sex = clean_data$static_data$sex,
+    sex = align_sex_coding(clean_data$static_data$sex)$sex,
     age_unit = 'days',
     age = intake_age
   )) * 100
@@ -94,7 +94,7 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
     mapply(bmiz_lookup, bmi = bmi, sex = sex, age = age, MoreArgs = list(data_source = data_source, age_unit = age_unit, dob = dob, date_assessed = date_assessed))
   }
   # Create a vector of sex values
-  sex_vector <- rep(1, nrow(clean_data$dynamic_data))
+  sex_vector <- rep(align_sex_coding(clean_data$static_data$sex)$sex, nrow(clean_data$dynamic_data))
 
   dynamic_data <- clean_data$dynamic_data %>%
     mutate(
