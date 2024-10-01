@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   Vignette: Vignette.html
-last_built: 2024-09-29T20:53Z
+last_built: 2024-10-01T11:30Z
 urls:
   reference: https://embark-lab.github.io/TeenGrowth/reference
   article: https://embark-lab.github.io/TeenGrowth/articles
