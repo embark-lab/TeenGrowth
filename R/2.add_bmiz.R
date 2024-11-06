@@ -69,8 +69,13 @@ add_bmiz <- function(data, wt = NULL, ht = NULL, age, bmi = NULL, wt_units = 'kg
     mutate(
       wt_kg = if (!is.null(wt)) weight_in_kg(wt, wt_units) else NULL,
       ht_cm = if (!is.null(ht)) height_in_cm(ht, ht_units) else NULL,
-      bmi = if (!is.null(bmi)) bmi else if (!is.null(wt) & !is.null(ht)) wt_kg / (ht_cm / 100)^2 else NULL,
-      age_days = sapply(age, age_in_days, dob = dob, date_assessed = date_assessed),
+      bmi = if (!is.null(bmi)) bmi else if (!is.null(wt) && !is.null(ht)) wt_kg / (ht_cm / 100)^2 else NULL,
+      # Only calculate age_days if the age_input is not already in days
+      age_days = if ("age_days" %in% names(data)) {
+        age_input  # If the input column is already in days, use it directly
+      } else {
+        sapply(age_input, age_in_days, dob = dob, date_assessed = date_assessed)  # Otherwise, calculate age in days
+      },
       sex_1M2F = align_sex_coding(sex)$sex
     )
 
@@ -84,7 +89,13 @@ add_bmiz <- function(data, wt = NULL, ht = NULL, age, bmi = NULL, wt_units = 'kg
   # Calculate BMI-Z scores using bmiz_lookup
   df <- df %>%
     rowwise() %>%
-    mutate (bmiz = bmiz_lookup(bmi = bmi, age = {{age}}, sex = sex_1M2F, dob = {{dob}},data_source = {{data_source}}, date_assessed = {{date_assessed}})) |>
+    mutate (bmiz = bmiz_lookup(bmi = bmi,
+                               age = age_days,
+                               sex = sex_1M2F,
+                               dob = {{dob}},
+                               data_source = {{data_source}},
+                               age_unit = 'days',
+                               date_assessed = {{date_assessed}})) |>
     ungroup()
 
   return(df)

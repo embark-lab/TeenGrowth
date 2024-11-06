@@ -246,7 +246,7 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       vjust = 0.5,
       angle = 90,
       color = embarktools::embark_colors[1],
-      size = 4,
+      size = 5,
       hjust = 1
     ) +
     annotate(
@@ -263,7 +263,7 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       vjust = 1,
       angle = 0,
       color = embarktools::embark_colors[1],
-      size = 4,
+      size = 5,
       hjust = 1
     ) +
     annotate(
@@ -274,7 +274,7 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       vjust = -1,
       hjust = 0.5,
       color = embarktools::embark_colors[1],
-      size = 3
+      size = 5
     ) +
     labs(title = "BMI Percentile Restoration", x = "", y = "BMI Percentile") +
     annotate(
@@ -285,7 +285,7 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       vjust = -1,
       hjust = 0.5,
       color = embarktools::embark_colors[1],
-      size = 3,
+      size = 5,
       hjust = 1
     ) +
     geom_hline(

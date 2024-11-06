@@ -152,7 +152,9 @@ bmiz_lookup <- function(bmi, sex = 2, age, data_source = 'cdc', age_unit = NULL,
   if (is.na(bmi) || is.na(sex) || is.na(age)) {
     return(NA)
   }
-
+  if (is.null(age_unit)) {
+    age_unit <- age_unit(age)# Set a default value, adjust as needed
+  }
   if (data_source == 'cdc') {
   if (age_unit != 'months') { age_mos <- age_in_months(age_in_days(age = as.numeric(age), age_unit = age_unit, dob = dob, date_assessed = date_assessed)) }
     else { age_mos <- as.numeric(age) }

@@ -12,17 +12,19 @@
 #'
 #' @export
 align_sex_coding <- function(sex) {
-  if (all(sex %in% c("Male", "Female"))) {
+  if (all(sex %in% c("Male", "Female", NA))) {
     coding <- "Male/Female"
     sex[sex == "Male"] <- 1
     sex[sex == "Female"] <- 2
-  } else if (all(sex %in% c("M", "F"))) {
+  } else if (all(sex %in% c("M", "F", NA))) {
     coding <- "M/F"
     sex[sex == "M"] <- 1
     sex[sex == "F"] <- 2
-  } else if (all(sex %in% c(1, 2))) {
+  } else if (all(sex %in% c(1, 2, NA))) {
     coding <- "1(Male)/2(Female)"
-  } else if (all(sex %in% c(0, 1))) {
+    sex[sex == 1] <- 1
+    sex[sex == 1] <- 2
+  } else if (all(sex %in% c(0, 1, NA))) {
     coding <- "0(Male)/1(Female)"
     sex[sex == 0] <- 1
     sex[sex == 1] <- 2
