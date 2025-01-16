@@ -8,14 +8,14 @@ add_bmiz(
   data,
   wt = NULL,
   ht = NULL,
-  age_input,
+  age = NULL,
   bmi = NULL,
   wt_units = "kg",
-  data_source = "cdc",
   ht_units = "cm",
   sex = 2,
   dob = NULL,
-  date_assessed = NULL
+  date_assessed = NULL,
+  data_source = "cdc"
 )
 }
 \arguments{
@@ -25,13 +25,11 @@ add_bmiz(
 
 \item{ht}{A vector representing height (optional).}
 
-\item{age_input}{A vector representing age.}
+\item{age}{A vector representing age.}
 
 \item{bmi}{A vector representing BMI (optional).}
 
 \item{wt_units}{A vector of weight units ('kg' or 'lb').}
-
-\item{data_source}{Data source ('cdc' or 'wgsr') - Default to 'cdc'}
 
 \item{ht_units}{A vector of height units ('cm', 'm', 'in', 'ft').}
 
@@ -40,9 +38,11 @@ add_bmiz(
 \item{dob}{Date of birth (optional).}
 
 \item{date_assessed}{Date of assessment (optional).}
+
+\item{data_source}{Data source ('cdc' or 'wgsr') - Default to 'cdc'.}
 }
 \value{
-A data frame with BMI-Z scores added as 'bmiz' column.
+A data frame with BMI-Z scores added as the 'bmiz' column.
 }
 \description{
 This function takes a dataset and calculates BMI-Z scores.
