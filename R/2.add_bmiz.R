@@ -50,7 +50,7 @@ bmiz_zscorer <- function(data, wt, ht, age, wt_units = 'kg', ht_units = 'cm', se
 #' @param data A data frame containing weight, height, age, and sex information.
 #' @param wt A vector representing weight (optional).
 #' @param ht A vector representing height (optional).
-#' @param age A vector representing age.
+#' @param age_input A vector representing age.
 #' @param bmi A vector representing BMI (optional).
 #' @param wt_units A vector of weight units ('kg' or 'lb').
 #' @param ht_units A vector of height units ('cm', 'm', 'in', 'ft').
@@ -64,7 +64,7 @@ bmiz_zscorer <- function(data, wt, ht, age, wt_units = 'kg', ht_units = 'cm', se
 #' @importFrom magrittr %>%
 #' @export
 
-add_bmiz <- function(data, wt = NULL, ht = NULL, age, bmi = NULL, wt_units = 'kg', data_source = 'cdc', ht_units = 'cm', sex = 2, dob = NULL, date_assessed = NULL) {
+add_bmiz <- function(data, wt = NULL, ht = NULL, age_input, bmi = NULL, wt_units = 'kg', data_source = 'cdc', ht_units = 'cm', sex = 2, dob = NULL, date_assessed = NULL) {
   df <- data %>%
     mutate(
       wt_kg = if (!is.null(wt)) weight_in_kg(wt, wt_units) else NULL,

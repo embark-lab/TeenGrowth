@@ -8,7 +8,7 @@ add_bmiz(
   data,
   wt = NULL,
   ht = NULL,
-  age,
+  age_input,
   bmi = NULL,
   wt_units = "kg",
   data_source = "cdc",
@@ -25,7 +25,7 @@ add_bmiz(
 
 \item{ht}{A vector representing height (optional).}
 
-\item{age}{A vector representing age.}
+\item{age_input}{A vector representing age.}
 
 \item{bmi}{A vector representing BMI (optional).}
 
