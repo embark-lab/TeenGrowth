@@ -1,9 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.2
 pkgdown_sha: ~
 articles:
   Vignette: Vignette.html
-last_built: 2025-01-16T22:05Z
+last_built: 2025-04-29T21:59Z
 urls:
   reference: https://embark-lab.github.io/TeenGrowth/reference
   article: https://embark-lab.github.io/TeenGrowth/articles
