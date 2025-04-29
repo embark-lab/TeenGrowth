@@ -213,9 +213,14 @@ if (!is.null(ed_aoo_col_name)) {
 }
 
 # Handle age at adult height
-if (!is.null(age_adult_ht_col_name)) {
-  data$agemos_adult_ht <- vectorized_age_in_months(!!sym(age_adult_ht_col_name), age_unit = age_unit)
-} else if (!is.null(ht_col_name) & !is.null(adult_ht_col_name)) {
+  if (!is.null(age_adult_ht_col_name) &&
+      age_adult_ht_col_name %in% names(data)) {
+
+    data$agemos_adult_ht <- vectorized_age_in_months(
+      data[[age_adult_ht_col_name]],   #  ← real column vector
+      age_unit = age_unit
+    )
+  } else if (!is.null(ht_col_name) & !is.null(adult_ht_col_name)) {
   data <- data %>%
     group_by(id) %>%
     filter((abs(height_cm - adult_height_cm)) <= 2) %>%
