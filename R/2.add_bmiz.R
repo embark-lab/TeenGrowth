@@ -64,8 +64,21 @@ bmiz_zscorer <- function(data, wt, ht, age, wt_units = 'kg', ht_units = 'cm', se
 #' @export
 
 add_bmiz <- function(data, wt = NULL, ht = NULL, age = NULL, bmi = NULL,
-                     wt_units = 'kg', ht_units = 'cm', sex = 2,
+                     wt_units = 'kg', ht_units = 'cm', sex = NULL,
                      dob = NULL, date_assessed = NULL, data_source = 'cdc') {
+
+  # If sex is not specified, create default 'sex' column with all 2s (female)
+  if (is.null(sex)) {
+    data$sex <- 2
+    sex_col <- "sex"
+    message("No sex column specified. Defaulting to all female (2).")
+  } else {
+    sex_col <- sex
+  }
+
+  if (!sex_col %in% names(data)) {
+    stop("The specified 'sex' column does not exist in the dataset.")
+  }
   # Check if age_days exists
   age_days_exists <- "age_days" %in% names(data)
 

@@ -97,8 +97,8 @@ if (is.null(sex_col_name)) {
   # add a message that sex is specified as female
   message("Sex column was not provided. All sex values have been set to female.")
 }
-data <- data |>
-  mutate(sex = align_sex_coding(sex)[[sex_col_name]])
+  data <- data |>
+    mutate(sex = align_sex_coding(.data[[sex_col_name]])$sex)
 
 
 # manage the adult_height column. if adult height column is provided, use this column and rename it 'adult_height' -- if it is not provided and ht_col_name is provided, make adult height = the most recent height measurement (oldest age) If the age is > 15 years for females (sex == 2) or 17 years for males (sex ==1)

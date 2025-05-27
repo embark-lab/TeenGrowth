@@ -22,8 +22,6 @@ align_sex_coding <- function(sex) {
     sex[sex == "F"] <- 2
   } else if (all(sex %in% c(1, 2, NA))) {
     coding <- "1(Male)/2(Female)"
-    sex[sex == 1] <- 1
-    sex[sex == 1] <- 2
   } else if (all(sex %in% c(0, 1, NA))) {
     coding <- "0(Male)/1(Female)"
     sex[sex == 0] <- 1
