@@ -26,7 +26,7 @@ clean_forecast_data <- function(data,
            lower_eWeight_kgs = lower_eWeight * 0.453592,
            upper_eWeight_kgs = upper_eWeight * 0.453592) %>%
     # round all of the values to 1 decimal place
-    mutate_all(round, 1) %>%
+    mutate(across(everything(), ~round(.x, 1))) %>%
     # make eBMI (lower_eBMI, upper_eBMI) as the format of eBMI (lower_eBMI, upper_eBMI)
     mutate(`Expected BMI` = paste0(eBMI, ' (', lower_eBMI, ', ', upper_eBMI, ')')) %>%
     # make eWeight (lower_eWeight, upper_eWeight) as the format of eWeight (lower_eWeight, upper_eWeight)

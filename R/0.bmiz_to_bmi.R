@@ -91,11 +91,13 @@ bmi_lookup <- function(data_point, type = 'bmiz', data_source = 'cdc', sex = 2, 
   }
 
   if (data_source == 'cdc') {
+    if (is.null(age_unit)) {
+      age_unit <- age_unit(age)
+    }
     if (age_unit == 'months') {
       age_mos <- age
-    }
-    else{
-    age_mos <- age_in_months(age_in_days(age = as.numeric(age), age_unit = age_unit, dob = dob, date_assessed = date_assessed))
+    } else {
+      age_mos <- age_in_months(age_in_days(age = as.numeric(age), age_unit = age_unit, dob = dob, date_assessed = date_assessed))
     }
     age_mos <- ifelse(age_mos >= 0 & age_mos < 0.5, 0, as.integer(age_mos + 0.5) - 0.5)
     max_age_cdc <- max(cdcData$agemos)

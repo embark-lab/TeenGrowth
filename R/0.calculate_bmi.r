@@ -17,6 +17,9 @@ calculate_bmi <- function(weight,
     bmi <- weight / (height^2)
   } else if (weight_unit == 'lb' & height_unit == 'in'){
     bmi <- (weight / (height^2)) * 703
+  } else {
+    stop(paste0("Unsupported unit combination: weight_unit='", weight_unit, "', height_unit='", height_unit,
+                "'. Supported combinations are kg/cm, kg/m, and lb/in."))
   }
 
   return(bmi)

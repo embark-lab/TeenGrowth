@@ -47,10 +47,6 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
     ) %>%
     mutate(age_days = as.numeric(date_assessed - dob))
 
-  # Debug: Check forecast_data after mutation
-  cat("Forecast data after processing:\n")
-  print(head(forecast_data))
-
   # Calculate mean percentiles
   ePct <- mean(forecast_data$ePct, na.rm = TRUE)
   lower_ePct <- mean(forecast_data$lower_ePCT, na.rm = TRUE)
@@ -67,9 +63,6 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
     height = clean_data$static_data$adult_ht_in * 2.54
   )
 
-  # Debug: Output start_bmi
-  cat("Start BMI:", start_bmi, "\n")
-
   # Calculate intake age in days
   intake_age <- as.numeric(clean_data$static_data$tx_start_date - clean_data$static_data$dob)
 
@@ -85,9 +78,6 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
     age_unit = 'days',
     age = intake_age
   )) * 100
-
-  # Debug: Output intake_pct
-  cat("Intake BMI percentile:", intake_pct, "\n")
 
   # Calculate percentile data for all dynamic data
   vectorized_bmiz_lookup <- function(bmi, sex, age, data_source = 'cdc', age_unit = NULL, dob = NULL, date_assessed = NULL) {
@@ -107,10 +97,6 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       )) * 100
     )
 
-  # Debug: Check dynamic_data after mutation
-  cat("Dynamic data after adding bmi and pct:\n")
-  print(tail(dynamic_data))
-
   # Filter data for plotting
   dynamic_data <- dynamic_data %>%
     filter(age_days >= clean_data$static_data$tx_start_age_days)
@@ -124,10 +110,6 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
   start_pct <- dynamic_data$pct[1]
   current_pct <- dynamic_data$pct[nrow(dynamic_data)]
   current_date <- dynamic_data$date_assessed[nrow(dynamic_data)]
-
-  # Debug: Output start and current percentiles
-  cat("Start percentile:", start_pct, "\n")
-  cat("Current percentile:", current_pct, "\n")
 
   # Create ribbon data for plotting
   ribbon_data <- data.frame(
@@ -164,11 +146,6 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
   upper_ePct_suffix <- ordinal_suffix(upper_ePct_rounded)
   start_pct_suffix <- ordinal_suffix(start_pct_rounded)
   current_pct_suffix <- ordinal_suffix(current_pct_rounded)
-
-  # Debug: Output rounded percentiles with suffixes
-  cat("Predicted BMI Percentile:", ePct_rounded, ePct_suffix, "\n")
-  cat("Intake Percentile:", start_pct_rounded, start_pct_suffix, "\n")
-  cat("Current Percentile:", current_pct_rounded, current_pct_suffix, "\n")
 
   ggplot(dynamic_data, mapping = aes(x = date_assessed)) +
     geom_point(
@@ -285,8 +262,7 @@ Pct_Restore_Plot <- function(clean_data, forecast_data) {
       vjust = -1,
       hjust = 0.5,
       color = embarktools::embark_colors[1],
-      size = 5,
-      hjust = 1
+      size = 5
     ) +
     geom_hline(
       mapping = aes(x = date_assessed, yintercept = ePct),

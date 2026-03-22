@@ -1,23 +1,6 @@
 
 
-# Helper function to convert height to the desired unit
-convert_height <- function(height, from_unit, to_unit) {
-  if (is.null(height)) return(NA)
-  if (from_unit == to_unit) return(height)
-  if (from_unit == 'cm' && to_unit == 'in') return(height * 0.393701)
-  if (from_unit == 'in' && to_unit == 'cm') return(height * 2.54)
-  stop("Invalid height units")
-}
-
-# Helper function to convert weight to the desired unit
-convert_weight <- function(weight, from_unit, to_unit) {
-  if (is.null(weight)) return(NA)
-  if (from_unit == to_unit) return(weight)
-  if (from_unit == 'kg' && to_unit == 'lb') return(weight * 2.20462)
-  if (from_unit == 'lb' && to_unit == 'kg') return(weight / 2.20462)
-  stop("Invalid weight units")
-}
-
+# convert_height() and convert_weight() are defined in R/0.utils.R
 
 #' Clean Treatment Data
 #' @param filtered_data A data frame containing the filtered data for a single participant.

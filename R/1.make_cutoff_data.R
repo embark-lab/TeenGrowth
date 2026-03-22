@@ -13,16 +13,15 @@ solve_for_weight <- function(bmi, height){
   return(w)
 }
 
-#' @title solve for weight
-#' @description Using BMI and height, solve for weight
-#' @param bmi 'bmi'
-#' @param height 'height in cm'
-#' @import dplyr
-#' @return weight
+#' @title Solve for Weight (Metric)
+#' @description Using BMI and height in cm, solve for weight in kg.
+#' @param bmi BMI value.
+#' @param height Height in centimeters.
+#' @return Weight in kilograms.
 #' @export
 
 solve_for_weight_metric <- function(bmi, height){
-  w = bmi*(height^2)
+  w = bmi * (height / 100)^2
   return(w)
 }
 
