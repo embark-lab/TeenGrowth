@@ -56,7 +56,7 @@ user_defined_forecast <- function(data,
   } else if (central_value == "most_recent") {
     central_bmiz <- data$bmiz[which.max(data$agemos)]
   } else if (central_value == "mean+most_recent") {
-    central_bmiz <- (mean(data$bmiz, na.rm = TRUE) + max(data$bmiz, na.rm = TRUE)) / 2
+    central_bmiz <- (mean(data$bmiz, na.rm = TRUE) + data$bmiz[which.max(data$agemos)]) / 2
   } else {
     stop("Invalid central_value. Choose 'mean', 'max', 'most_recent', or 'mean+most_recent'.")
   }
